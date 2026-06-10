@@ -226,14 +226,16 @@ export async function runEmotionWorkflow({ userText, location }) {
 // ═══════════════════════════════════════════════════════════════════
 // 美食工作流
 // ═══════════════════════════════════════════════════════════════════
-export async function runFoodWorkflow({ userText, dishName, targetStyle = 'hupu' }) {
-  console.log('[Food Workflow] 调用:', { dishName, userText, targetStyle })
+export async function runFoodWorkflow({ userText, originalReview, dishName, targetStyle = 'hupu' }) {
+  const reviewText = userText ?? originalReview ?? ''
+  console.log('[Food Workflow] 调用:', { dishName, userText: reviewText, targetStyle })
 
   try {
     const response = await apiPost('/food', {
       dish_name: dishName,
       dishName,
-      original_review: userText,
+      original_review: reviewText,
+      originalReview: reviewText,
       target_style: targetStyle,
       targetStyle,
     })
@@ -248,7 +250,7 @@ export async function runFoodWorkflow({ userText, dishName, targetStyle = 'hupu'
   } catch (e) {
     console.error('[Food Workflow] 错误:', e)
     console.log('[Food Workflow] 使用 Mock 数据')
-    return mockFoodWorkflow(userText, dishName, targetStyle)
+    return mockFoodWorkflow(reviewText, dishName, targetStyle)
   }
 }
 

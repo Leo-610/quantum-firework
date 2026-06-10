@@ -67,7 +67,7 @@ export default function OuterWorldPanel() {
     try {
       const data = await runFoodWorkflow({
         dishName: dishName || '今日特供',
-        originalReview: review,
+        userText: review,
         targetStyle: style,
       })
       setResult(data)
