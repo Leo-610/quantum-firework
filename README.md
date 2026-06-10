@@ -23,14 +23,28 @@ cd ../量子烟火-server && npm install
 cd ../量子烟火 && bash scripts/coze-preview-run.sh
 ```
 
-## 部署（Vercel）
+## 部署（Vercel + GitHub）
 
-- **生产**：`main` 分支 → https://quantum-fireworks-ebon.vercel.app
-- **预览**：`develop` 分支 → Vercel Preview URL
+| 分支 | 部署目标 | 域名 |
+|------|----------|------|
+| `main` | Production | https://quantum-fireworks-ebon.vercel.app |
+| `develop` | Preview | 每次 Push 自动生成 Preview URL |
 
-环境变量见 `量子烟火/.env.vercel.example`，**切勿提交 `.env` 文件**。
+- **GitHub**：https://github.com/Leo-610/quantum-firework
+- **Vercel 项目**：`leo-610s-projects/quantum-fireworks`（Root Directory = `量子烟火`，已关联 GitHub）
+- Push 到 `main` 后自动触发生产部署；环境变量已在 Vercel Production 配置
 
-详细说明：[量子烟火/VERCEL.md](./量子烟火/VERCEL.md)
+### 首次推送到 GitHub
+
+```bash
+cd projects
+# 需先登录 GitHub（浏览器或 Personal Access Token）
+bash scripts/push-to-github.sh
+```
+
+推送脚本会在提交前检查 `.env` 是否误入 Git，**API 密钥不会上传**。
+
+环境变量见 `量子烟火/.env.vercel.example`，仅存放在 Vercel Dashboard 与本地 `.env`。
 
 ## 分支策略
 
