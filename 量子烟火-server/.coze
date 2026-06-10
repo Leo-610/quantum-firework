@@ -1,0 +1,12 @@
+[project]
+sub_id = "e5d4c3b3"
+name = "量子烟火-server"
+requires = ["nodejs-24"]
+project_type = "backend"
+
+[preview]
+preview_enable = "disabled"
+
+[deploy]
+build = ["pnpm", "run", "build"]
+run = ["node", "server.js"]
