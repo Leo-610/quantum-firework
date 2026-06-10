@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-# 将本地 .env 同步到 Vercel（Production + Preview + Development）
-# 密钥仅存 Vercel，不进入 Git
+# 将本地 .env 同步到 Vercel Production（密钥不进 Git）
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -17,10 +16,8 @@ export PATH="${ROOT}/../.tools/node-v20.19.2-darwin-arm64/bin:${PATH:-}"
 add_var() {
   local key="$1"
   local val="$2"
-  for env in production preview development; do
-    echo "设置 $key ($env) ..."
-    npx vercel@latest env add "$key" "$env" --value "$val" --yes --force
-  done
+  echo "设置 $key (production) ..."
+  npx vercel@latest env add "$key" production --value "$val" --yes --force
 }
 
 VARS=(
@@ -47,4 +44,4 @@ if [[ -f "$ROOT/.env" ]]; then
   done
 fi
 
-echo "完成。Git push 到 main 后 Vercel 将自动 Production 部署。"
+echo "Production 环境变量已同步。Preview 请在 Vercel Dashboard 勾选 Preview 后批量复制。"
