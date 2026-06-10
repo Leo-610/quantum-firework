@@ -15,7 +15,7 @@ const CANTEENS = [
 ]
 
 /** 表世界主面板 */
-export default function OuterWorldPanel() {
+export default function OuterWorldPanel({ isMobile = false }) {
   const [selectedCanteen, setSelectedCanteen] = useState(CANTEENS[0].id)
   const [dishName, setDishName] = useState('')
   const [review, setReview] = useState('')
@@ -80,10 +80,10 @@ export default function OuterWorldPanel() {
   }
 
   return (
-    <div className="flex flex-col gap-4 p-4">
+    <div className={`flex flex-col gap-3 sm:gap-4 ${isMobile ? 'p-3' : 'p-4'}`}>
       {/* 标题 */}
-      <div className="flex flex-col items-center gap-2 pt-2">
-        <Sigil variant="outer" icon={Flame} size={52} />
+      <div className="flex flex-col items-center gap-2 pt-1 sm:pt-2">
+        <Sigil variant="outer" icon={Flame} size={isMobile ? 44 : 52} />
         <div className="text-center">
           <h2 className="font-display text-lg font-bold neon-text-orange tracking-widest">
             表 · 世 · 界
@@ -97,7 +97,7 @@ export default function OuterWorldPanel() {
         <p className="text-xs text-orange-400/60 mb-2 font-mono inline-flex items-center gap-1">
           <Building2 size={12} /> 选择食堂
         </p>
-        <div className="flex flex-col sm:flex-row gap-2">
+        <div className={`flex gap-2 ${isMobile ? 'flex-col' : 'flex-col sm:flex-row'}`}>
           {CANTEENS.map(c => (
             <button
               key={c.id}
@@ -141,21 +141,23 @@ export default function OuterWorldPanel() {
           value={review}
           onChange={e => { setReview(e.target.value); setError(null) }}
           onKeyDown={e => { if (e.key === 'Enter' && e.ctrlKey) handleSubmit() }}
-          placeholder={"全是肥肉、排队太久、分量少得可怜...\n什么都能吐槽！（Ctrl+Enter 发送）"}
-          rows={3}
+          placeholder={isMobile
+            ? '全是肥肉、排队太久、分量少得可怜… 什么都能吐槽！'
+            : "全是肥肉、排队太久、分量少得可怜...\n什么都能吐槽！（Ctrl+Enter 发送）"}
+          rows={isMobile ? 3 : 3}
           className="ember-input rarity-field w-full rounded-lg p-3 text-sm resize-none leading-relaxed"
         />
       </div>
 
       {/* 文体选择 */}
-      <StyleRewriter selected={style} onSelect={setStyle} />
+      <StyleRewriter selected={style} onSelect={setStyle} isMobile={isMobile} />
 
       {/* 提交 */}
       <button
         onClick={handleSubmit}
         disabled={isLoading || !review.trim()}
         className={`
-          btn-ember w-full py-3 text-sm tracking-wider transition-all
+          btn-ember w-full py-3.5 text-sm tracking-wider transition-all touch-target
           ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}
         `}
       >
@@ -210,6 +212,7 @@ export default function OuterWorldPanel() {
                 data={result.radar_data}
                 title={dishName || '今日特供'}
                 rarityClass={radarRarityClass(result.radar_data)}
+                isMobile={isMobile}
               />
             )}
           </motion.div>

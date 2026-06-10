@@ -953,15 +953,140 @@ html, body {
   color: rgba(255, 225, 180, 0.85);
 }
 
+/* ─── 移动端适配 ─── */
+.panel-shell--fixed {
+  width: 320px;
+}
+
+/* Safe area（刘海屏 / 底部横条） */
+.pt-safe {
+  padding-top: max(12px, env(safe-area-inset-top));
+}
+
+.pb-safe {
+  padding-bottom: max(16px, env(safe-area-inset-bottom));
+}
+
+.bottom-safe {
+  bottom: max(12px, env(safe-area-inset-bottom));
+}
+
+.top-safe-offset {
+  top: calc(max(12px, env(safe-area-inset-top)) + 52px);
+}
+
+.desktop-only {
+  display: block;
+}
+
+.mobile-only {
+  display: none;
+}
+
+/* 底部抽屉 */
+.panel-shell--mobile {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  max-height: min(88vh, 100%);
+  border-radius: 16px 16px 0 0;
+  box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.45);
+}
+
+.panel-shell--mobile::before,
+.panel-shell--mobile::after {
+  display: none;
+}
+
+.mobile-top-bar {
+  padding-bottom: 8px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.55) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.mobile-top-bar > * {
+  pointer-events: auto;
+}
+
+.mobile-sheet-handle {
+  touch-action: manipulation;
+  cursor: pointer;
+}
+
+.mobile-sheet-grab {
+  display: block;
+  width: 36px;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.rotor-switch--compact {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rotor-switch--compact .rotor-halo,
+.rotor-switch--compact .rotor-ring,
+.rotor-switch--compact .rotor-orbit {
+  display: none;
+}
+
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+}
+
 @media (max-width: 640px) {
-  .heritage-card-wrap {
-    bottom: 16px;
+  .panel-shell--fixed {
+    width: 100%;
   }
+
+  .panel-scroll {
+    padding-left: 8px;
+    padding-right: 8px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .world-atmosphere {
+    inset: -12% -10%;
+  }
+
+  .desktop-only {
+    display: none !important;
+  }
+
+  .mobile-only {
+    display: block;
+  }
+
+  /* 触控友好：输入框字号 ≥16px 避免 iOS 自动缩放 */
+  .cyber-input,
+  .ember-input {
+    font-size: 16px;
+  }
+
+  .heritage-card-wrap {
+    bottom: calc(80px + env(safe-area-inset-bottom));
+    left: 12px;
+    right: 12px;
+  }
+
   .heritage-card {
     padding: 14px 14px 12px;
   }
-}
 
+  .neon-text-cyan,
+  .neon-text-orange {
+    text-shadow: none;
+  }
+}
 /* ─── 仪式感动效 ─── */
 .ritual-ring {
   position: absolute;
@@ -1033,26 +1158,6 @@ html, body {
   color: rgba(255, 200, 160, 0.7);
   font-size: 10px;
   line-height: 1.4;
-}
-
-/* ─── 移动端适配 ─── */
-.panel-shell--fixed {
-  width: 320px;
-}
-
-@media (max-width: 640px) {
-  .panel-shell--fixed {
-    width: 100%;
-  }
-
-  .panel-scroll {
-    padding-left: 12px;
-    padding-right: 12px;
-  }
-
-  .world-atmosphere {
-    inset: -12% -10%;
-  }
 }
 
 /* ═══════════════════════════════════

@@ -17,19 +17,20 @@ const STYLES = [
 ]
 
 /** 文豪文体选择器 */
-export default function StyleRewriter({ selected, onSelect }) {
+export default function StyleRewriter({ selected, onSelect, isMobile = false }) {
   return (
     <div>
       <p className="text-xs text-orange-400/60 mb-2 font-mono inline-flex items-center gap-1">
         <Sparkles size={12} /> 选择个性风格
       </p>
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+      <div className={`grid gap-2 ${isMobile ? 'grid-cols-2' : 'grid-cols-2 sm:grid-cols-3'}`}>
         {STYLES.map(s => (
           <button
             key={s.id}
             onClick={() => onSelect(s.id)}
             className={`
-              text-left p-2.5 rounded-lg transition-all duration-300 text-xs
+              text-left rounded-lg transition-all duration-300 text-xs touch-target
+              ${isMobile ? 'p-2 min-h-[52px]' : 'p-2.5'}
               ${selected === s.id
                 ? 'bg-amber-500/15 border border-amber-400/60 shadow-[0_0_10px_rgba(245,166,35,0.2)]'
                 : 'bg-orange-500/04 border border-orange-400/15 hover:border-orange-400/30'

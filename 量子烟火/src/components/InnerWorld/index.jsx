@@ -26,7 +26,7 @@ function getLiveCoords(id) {
 }
 
 /** 里世界主面板 */
-export default function InnerWorldPanel() {
+export default function InnerWorldPanel({ isMobile = false }) {
   const [input, setInput] = useState('')
   const [selectedLoc, setSelectedLoc] = useState('siyuan')
   const [showPlant, setShowPlant] = useState(false)
@@ -91,10 +91,10 @@ export default function InnerWorldPanel() {
   }
 
   return (
-    <div className="flex flex-col gap-4 p-4">
+    <div className={`flex flex-col gap-3 sm:gap-4 ${isMobile ? 'p-3' : 'p-4'}`}>
       {/* 标题区 */}
-      <div className="flex flex-col items-center gap-2 pt-2">
-        <Sigil variant="inner" icon={Atom} size={52} />
+      <div className="flex flex-col items-center gap-2 pt-1 sm:pt-2">
+        <Sigil variant="inner" icon={Atom} size={isMobile ? 44 : 52} />
         <div className="text-center">
           <h2 className="font-display text-lg font-bold neon-text-cyan tracking-widest">
             里 · 世 · 界
@@ -108,7 +108,7 @@ export default function InnerWorldPanel() {
         <p className="text-xs text-cyan-400/60 mb-2 font-mono inline-flex items-center gap-1">
           <MapPin size={12} /> 当前位置
         </p>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
+        <div className={`grid gap-1.5 ${isMobile ? 'grid-cols-3' : 'grid-cols-2 sm:grid-cols-3'}`}>
           {LOCATIONS.map(loc => (
             <button
               key={loc.id}
@@ -138,8 +138,10 @@ export default function InnerWorldPanel() {
           value={input}
           onChange={e => { setInput(e.target.value); setError(null) }}
           onKeyDown={e => { if (e.key === 'Enter' && e.ctrlKey) handleSubmit() }}
-          placeholder={"跑不出代码、绩点内耗、深夜 emo...\n任何倾诉，这里都接住。（Ctrl+Enter 发送）"}
-          rows={4}
+          placeholder={isMobile
+            ? '跑不出代码、绩点内耗、深夜 emo… 任何倾诉，这里都接住。'
+            : "跑不出代码、绩点内耗、深夜 emo...\n任何倾诉，这里都接住。（Ctrl+Enter 发送）"}
+          rows={isMobile ? 3 : 4}
           className="cyber-input rarity-field w-full rounded-lg p-3 text-sm resize-none leading-relaxed"
         />
       </div>
@@ -149,7 +151,7 @@ export default function InnerWorldPanel() {
         onClick={handleSubmit}
         disabled={isProcessing || !input.trim()}
         className={`
-          btn-cyber w-full py-3 text-sm tracking-wider transition-all
+          btn-cyber w-full py-3 text-sm tracking-wider transition-all touch-target
           ${isProcessing ? 'opacity-50 cursor-not-allowed' : ''}
         `}
       >
