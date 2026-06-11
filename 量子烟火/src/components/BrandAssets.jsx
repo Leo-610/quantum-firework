@@ -5,6 +5,8 @@ export const BJTU_BADGE = '/bjtu-badge.png'
 export const BJTU_BADGE_WHITE = '/bjtu-badge-white.png'
 export const BJTU_WORDMARK = '/bjtu-wordmark.png'
 export const BJTU_WORDMARK_LIGHT = '/bjtu-wordmark-light.png'
+export const VOLCENGINE_LOGO = '/volcengine-logo.png'
+export const VOLCENGINE_LOGO_LIGHT = '/volcengine-logo-light.png'
 
 /** 应用图标（圆角方形） */
 export function AppIconMark({ size = 32, className = '' }) {

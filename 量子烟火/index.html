@@ -41,6 +41,14 @@
         <img class="qf-inline-splash__icon" src="/app-icon.png" alt="" width="96" height="96" />
         <img class="qf-inline-splash__logo" src="/logo-horizontal.png" alt="量子烟火" />
       </div>
+      <div class="qf-inline-splash__sponsor">
+        <p class="qf-inline-splash__sponsor-label">首届「火山杯」AI 应用创新大赛</p>
+        <div class="qf-inline-splash__sponsor-row">
+          <span>Powered by 扣子编程</span>
+          <span aria-hidden="true">×</span>
+          <img src="/volcengine-logo-light.png" alt="火山引擎" />
+        </div>
+      </div>
     </div>
     <style>
       #qf-inline-splash {
@@ -95,6 +103,37 @@
         height: auto;
         margin: 0 auto;
         display: block;
+      }
+      .qf-inline-splash__sponsor {
+        position: absolute;
+        bottom: max(24px, env(safe-area-inset-bottom));
+        left: 0;
+        right: 0;
+        text-align: center;
+        z-index: 1;
+        padding: 0 16px;
+      }
+      .qf-inline-splash__sponsor-label {
+        font-family: 'Noto Sans SC', sans-serif;
+        font-size: 9px;
+        letter-spacing: 0.1em;
+        color: rgba(200,230,245,0.35);
+        margin: 0 0 5px;
+      }
+      .qf-inline-splash__sponsor-row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        flex-wrap: wrap;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 9px;
+        color: rgba(200,230,245,0.45);
+      }
+      .qf-inline-splash__sponsor-row img {
+        height: 14px;
+        width: auto;
+        opacity: 0.7;
       }
     </style>
     <div id="root"></div>

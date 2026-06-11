@@ -5,6 +5,7 @@ import {
   LOGO_HORIZONTAL,
   BJTU_BADGE_WHITE,
   BJTU_WORDMARK_LIGHT,
+  VOLCENGINE_LOGO_LIGHT,
 } from '../BrandAssets'
 
 const BURST_COUNT = 24
@@ -37,6 +38,28 @@ function BJTUBrand({ blend = 0 }) {
         alt="北京交通大学 Beijing Jiaotong University"
         className="splash-bjtu-wordmark"
       />
+    </motion.div>
+  )
+}
+
+function SplashSponsor() {
+  return (
+    <motion.div
+      className="splash-sponsor"
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 1.1, duration: 0.5 }}
+    >
+      <p className="splash-sponsor-label">首届「火山杯」AI 应用创新大赛</p>
+      <div className="splash-sponsor-row">
+        <span className="splash-sponsor-coze">Powered by 扣子编程</span>
+        <span className="splash-sponsor-sep" aria-hidden="true">×</span>
+        <img
+          src={VOLCENGINE_LOGO_LIGHT}
+          alt="火山引擎"
+          className="splash-sponsor-volc"
+        />
+      </div>
     </motion.div>
   )
 }
@@ -145,6 +168,8 @@ export default function SplashScreen({ progress = 0, phase = '初始化…' }) {
           <span className="splash-percent font-mono">{Math.round(progress)}%</span>
         </div>
       </div>
+
+      <SplashSponsor />
 
       {showBurst && (
         <div className="splash-burst" aria-hidden="true">

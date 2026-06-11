@@ -1471,6 +1471,56 @@ html, body {
   margin: 0 auto;
 }
 
+.splash-sponsor {
+  position: absolute;
+  bottom: max(88px, calc(env(safe-area-inset-bottom) + 72px));
+  left: 0;
+  right: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 0 20px;
+  pointer-events: none;
+}
+
+.splash-sponsor-label {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: rgba(200, 230, 245, 0.38);
+  margin: 0;
+}
+
+.splash-sponsor-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.splash-sponsor-coze {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: rgba(200, 230, 245, 0.5);
+}
+
+.splash-sponsor-sep {
+  font-size: 10px;
+  color: rgba(200, 230, 245, 0.25);
+}
+
+.splash-sponsor-volc {
+  height: 16px;
+  width: auto;
+  object-fit: contain;
+  opacity: 0.72;
+  filter: drop-shadow(0 0 6px rgba(15, 240, 252, 0.12));
+}
+
 .splash-progress-track {
   height: 3px;
   border-radius: 999px;
@@ -1560,6 +1610,22 @@ html, body {
 
   .splash-bjtu-wordmark {
     width: min(78vw, 180px);
+  }
+
+  .splash-sponsor-label {
+    font-size: 9px;
+  }
+
+  .splash-sponsor-coze {
+    font-size: 9px;
+  }
+
+  .splash-sponsor-volc {
+    height: 14px;
+  }
+
+  .splash-sponsor {
+    bottom: max(82px, calc(env(safe-area-inset-bottom) + 66px));
   }
 
   .splash-bjtu-en {
