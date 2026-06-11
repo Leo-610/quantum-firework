@@ -114,10 +114,14 @@ export default function InnerWorldPanel({ isMobile = false }) {
               key={loc.id}
               onClick={() => setSelectedLoc(loc.id)}
               className={`
-                text-xs py-1.5 px-2 rounded transition-all duration-300 font-mono
-                ${selectedLoc === loc.id
-                  ? 'bg-cyan-400/15 border border-cyan-400/60 text-cyan-300 shadow-[0_0_8px_rgba(15,240,252,0.3)]'
-                  : 'bg-cyan-400/04 border border-cyan-400/15 text-cyan-400/50 hover:border-cyan-400/30'
+                transition-all duration-300 font-mono touch-target
+                ${isMobile
+                  ? `mobile-loc-chip ${selectedLoc === loc.id ? 'is-active' : ''}`
+                  : `text-xs py-1.5 px-2 rounded ${
+                      selectedLoc === loc.id
+                        ? 'bg-cyan-400/15 border border-cyan-400/60 text-cyan-300 shadow-[0_0_8px_rgba(15,240,252,0.3)]'
+                        : 'bg-cyan-400/04 border border-cyan-400/15 text-cyan-400/50 hover:border-cyan-400/30'
+                    }`
                 }
               `}
             >

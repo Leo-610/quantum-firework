@@ -116,6 +116,14 @@ html, body {
     linear-gradient(180deg, var(--outer-bg) 0%, var(--outer-bg2) 70%);
 }
 
+.text-theme-primary {
+  color: var(--theme-primary);
+}
+
+.text-theme-body {
+  color: color-mix(in srgb, var(--theme-text) 88%, white);
+}
+
 /* ─── 世界外壳与氛围层 ─── */
 .world-shell {
   isolation: isolate;
@@ -1044,14 +1052,157 @@ html, body {
 }
 
 @media (max-width: 640px) {
+  /* 移动端配色：略提亮度、降低霓虹眩光，小屏更易读 */
+  .world-inner {
+    --inner-primary: #45e8f5;
+    --inner-text: #d8eef8;
+    --inner-glow: rgba(69, 232, 245, 0.22);
+    --inner-glow-strong: rgba(69, 232, 245, 0.38);
+    --inner-edge: rgba(69, 232, 245, 0.28);
+    --theme-primary: var(--inner-primary);
+    --theme-text: var(--inner-text);
+    --theme-glow: var(--inner-glow);
+    --theme-glow-strong: var(--inner-glow-strong);
+    --theme-edge: var(--inner-edge);
+  }
+
+  .world-outer {
+    --outer-primary: #ff8555;
+    --outer-text: #fff5e8;
+    --outer-glow: rgba(255, 133, 85, 0.22);
+    --outer-glow-strong: rgba(255, 133, 85, 0.38);
+    --outer-edge: rgba(255, 133, 85, 0.3);
+    --theme-primary: var(--outer-primary);
+    --theme-text: var(--outer-text);
+    --theme-glow: var(--outer-glow);
+    --theme-glow-strong: var(--outer-glow-strong);
+    --theme-edge: var(--outer-edge);
+  }
+
   .panel-shell--fixed {
     width: 100%;
   }
 
   .panel-scroll {
-    padding-left: 8px;
-    padding-right: 8px;
+    padding-left: 10px;
+    padding-right: 10px;
     -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.12) transparent;
+  }
+
+  .panel-scroll::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .panel-scroll::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.14);
+    border-radius: 999px;
+  }
+
+  .panel-shell--mobile {
+    max-height: min(92vh, 100%);
+    box-shadow:
+      0 -12px 48px rgba(0, 0, 0, 0.55),
+      0 0 0 1px var(--theme-edge);
+  }
+
+  .mobile-top-bar {
+    padding-bottom: 10px;
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--theme-bg) 88%, transparent) 0%,
+      transparent 100%
+    );
+  }
+
+  .mobile-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 35;
+    background: rgba(0, 0, 0, 0.48);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+  }
+
+  .mobile-cta-btn {
+    border-radius: 14px;
+    box-shadow:
+      0 8px 28px rgba(0, 0, 0, 0.35),
+      0 0 20px var(--theme-glow);
+  }
+
+  .mobile-cta-btn:active {
+    transform: scale(0.98);
+  }
+
+  .glass-inner,
+  .glass-outer {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.28);
+  }
+
+  .mobile-loc-chip {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    font-size: 11px;
+  }
+
+  .mobile-loc-chip.is-active {
+    background: color-mix(in srgb, var(--theme-primary) 16%, transparent);
+    border-color: color-mix(in srgb, var(--theme-primary) 55%, transparent);
+    color: var(--theme-primary);
+    box-shadow: 0 0 10px var(--theme-glow);
+  }
+
+  .mobile-loc-chip:not(.is-active) {
+    background: color-mix(in srgb, var(--theme-primary) 5%, transparent);
+    border: 1px solid color-mix(in srgb, var(--theme-primary) 18%, transparent);
+    color: color-mix(in srgb, var(--theme-text) 65%, transparent);
+  }
+
+  .style-scroll-row {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 2px 2px 6px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .style-scroll-row::-webkit-scrollbar {
+    display: none;
+  }
+
+  .mobile-style-chip {
+    flex: 0 0 auto;
+    width: 118px;
+    scroll-snap-align: start;
+    min-height: 56px;
+    border-radius: 12px;
+  }
+
+  .mobile-radar-legend {
+    margin-top: 8px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--theme-primary) 6%, transparent);
+    border: 1px solid color-mix(in srgb, var(--theme-primary) 15%, transparent);
+  }
+
+  .mobile-radar-legend summary {
+    font-size: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    color: color-mix(in srgb, var(--theme-primary) 75%, white);
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .mobile-radar-legend summary::-webkit-details-marker {
+    display: none;
   }
 
   .world-atmosphere {
@@ -1070,10 +1221,17 @@ html, body {
   .cyber-input,
   .ember-input {
     font-size: 16px;
+    border-radius: 12px;
+  }
+
+  .btn-cyber,
+  .btn-ember {
+    border-radius: 12px;
+    font-size: 15px;
   }
 
   .heritage-card-wrap {
-    bottom: calc(80px + env(safe-area-inset-bottom));
+    bottom: calc(88px + env(safe-area-inset-bottom));
     left: 12px;
     right: 12px;
   }

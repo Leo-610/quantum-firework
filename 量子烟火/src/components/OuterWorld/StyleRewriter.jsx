@@ -16,39 +16,55 @@ const STYLES = [
   { id: 'manual',   label: '说明书体',   Icon: FileText,  desc: '产品规格，严谨刻板' },
 ]
 
+function StyleChip({ s, selected, isMobile, onSelect }) {
+  const active = selected === s.id
+  return (
+    <button
+      type="button"
+      onClick={() => onSelect(s.id)}
+      className={`
+        text-left rounded-lg transition-all duration-300 text-xs touch-target
+        ${isMobile ? 'mobile-style-chip p-2.5' : 'p-2.5'}
+        ${active
+          ? 'bg-amber-500/15 border border-amber-400/60 shadow-[0_0_10px_rgba(245,166,35,0.2)]'
+          : 'bg-orange-500/04 border border-orange-400/15 hover:border-orange-400/30'
+        }
+      `}
+    >
+      <div className="flex items-center gap-1.5 mb-0.5">
+        <s.Icon size={13} className={active ? 'text-amber-300' : 'text-orange-400/50'} />
+        <span className={`font-bold ${active ? 'text-amber-300' : 'text-orange-400/70'}`}>
+          {s.label}
+        </span>
+      </div>
+      <p className={`text-[10px] leading-tight ${active ? 'text-amber-200/60' : 'text-orange-400/40'}`}>
+        {s.desc}
+      </p>
+    </button>
+  )
+}
+
 /** 文豪文体选择器 */
 export default function StyleRewriter({ selected, onSelect, isMobile = false }) {
   return (
     <div>
       <p className="text-xs text-orange-400/60 mb-2 font-mono inline-flex items-center gap-1">
         <Sparkles size={12} /> 选择个性风格
+        {isMobile && <span className="text-orange-400/35 ml-1">← 滑动</span>}
       </p>
-      <div className={`grid gap-2 ${isMobile ? 'grid-cols-2' : 'grid-cols-2 sm:grid-cols-3'}`}>
-        {STYLES.map(s => (
-          <button
-            key={s.id}
-            onClick={() => onSelect(s.id)}
-            className={`
-              text-left rounded-lg transition-all duration-300 text-xs touch-target
-              ${isMobile ? 'p-2 min-h-[52px]' : 'p-2.5'}
-              ${selected === s.id
-                ? 'bg-amber-500/15 border border-amber-400/60 shadow-[0_0_10px_rgba(245,166,35,0.2)]'
-                : 'bg-orange-500/04 border border-orange-400/15 hover:border-orange-400/30'
-              }
-            `}
-          >
-            <div className="flex items-center gap-1.5 mb-0.5">
-              <s.Icon size={13} className={selected === s.id ? 'text-amber-300' : 'text-orange-400/50'} />
-              <span className={`font-bold ${selected === s.id ? 'text-amber-300' : 'text-orange-400/70'}`}>
-                {s.label}
-              </span>
-            </div>
-            <p className={`text-[10px] leading-tight ${selected === s.id ? 'text-amber-200/60' : 'text-orange-400/40'}`}>
-              {s.desc}
-            </p>
-          </button>
-        ))}
-      </div>
+      {isMobile ? (
+        <div className="style-scroll-row">
+          {STYLES.map(s => (
+            <StyleChip key={s.id} s={s} selected={selected} isMobile onSelect={onSelect} />
+          ))}
+        </div>
+      ) : (
+        <div className="grid gap-2 grid-cols-2 sm:grid-cols-3">
+          {STYLES.map(s => (
+            <StyleChip key={s.id} s={s} selected={selected} isMobile={false} onSelect={onSelect} />
+          ))}
+        </div>
+      )}
     </div>
   )
 }

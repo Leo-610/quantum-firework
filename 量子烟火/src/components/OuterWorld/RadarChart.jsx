@@ -156,6 +156,19 @@ export default function RadarChart({ data, title, rarityClass = 'rarity-rare', i
           </div>
         ))}
       </div>
+
+      {isMobile && (
+        <details className="mobile-radar-legend">
+          <summary>指标说明 ▾</summary>
+          <div className="mt-2 space-y-1 text-[10px] text-orange-300/55 font-mono leading-relaxed">
+            <p>性价比：同价位体验</p>
+            <p>抗饿度：饱腹持久</p>
+            <p>排队难度：越低分越高</p>
+            <p>阿姨手抖：出餐稳定性</p>
+            <p>踩雷率：越低分越高</p>
+          </div>
+        </details>
+      )}
     </motion.div>
   )
 }

@@ -103,15 +103,16 @@ export default function OuterWorldPanel({ isMobile = false }) {
               key={c.id}
               onClick={() => setSelectedCanteen(c.id)}
               className={`
-                flex-1 text-xs py-2 px-2 rounded transition-all duration-300
+                flex-1 text-xs rounded transition-all duration-300 touch-target
+                ${isMobile ? 'py-3 px-3 min-h-[52px] flex items-center gap-3' : 'py-2 px-2'}
                 ${selectedCanteen === c.id
                   ? 'bg-orange-500/15 border border-orange-400/60 text-orange-300 shadow-[0_0_8px_rgba(255,107,53,0.3)]'
                   : 'bg-orange-500/04 border border-orange-400/15 text-orange-400/50 hover:border-orange-400/30'
                 }
               `}
             >
-              <div className="text-lg">
-                <c.Icon size={18} />
+              <div className={isMobile ? '' : 'text-lg'}>
+                <c.Icon size={isMobile ? 20 : 18} />
               </div>
               <div className="font-mono mt-0.5">{c.name}</div>
             </button>

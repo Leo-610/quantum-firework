@@ -19,6 +19,7 @@ export default function App() {
   const loadPlantsToHeatmap = useEmotionStore(s => s.loadPlantsToHeatmap)
   const isMobile = useIsMobile()
   const { complete: bootComplete, progress, phase } = useAppBoot()
+  const isInner = world === 'inner'
 
   useEffect(() => {
     if (!userId) {
@@ -48,9 +49,14 @@ export default function App() {
       touchZoom: !isPanelOpen,
       doubleClickZoom: !isPanelOpen,
     })
-  }, [mapInstance, isPanelOpen, isMobile])
+  }, [mapInstance, isPanelOpen])
 
-  const isInner = world === 'inner'
+  useEffect(() => {
+    const meta = document.querySelector('meta[name="theme-color"]')
+    if (meta) {
+      meta.content = isInner ? '#060c18' : '#140600'
+    }
+  }, [isInner])
 
   const panelMotion = isMobile
     ? { initial: { y: '100%' }, animate: { y: 0 }, exit: { y: '100%' } }
@@ -71,7 +77,7 @@ export default function App() {
         <div className="mobile-top-bar absolute top-0 left-0 right-0 z-50 flex items-center justify-between px-3 pt-safe">
           <div className="hud-glass flex items-center gap-2 px-2.5 py-1.5 rounded-xl">
             <AppIconMark size={28} />
-            <span className="text-xs font-bold font-display" style={{ color: isInner ? '#0ff0fc' : '#ff6b35' }}>
+            <span className="text-xs font-bold font-display text-theme-primary">
               量子烟火
             </span>
           </div>
@@ -144,6 +150,22 @@ export default function App() {
           </div>
         </div>
       )}
+
+      {/* 移动端：面板遮罩（点击关闭） */}
+      <AnimatePresence>
+        {isMobile && isPanelOpen && (
+          <motion.button
+            type="button"
+            aria-label="关闭面板"
+            className="mobile-backdrop border-0 p-0 cursor-pointer"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={() => setPanelOpen(false)}
+          />
+        )}
+      </AnimatePresence>
 
       {/* 面板：桌面侧栏 / 移动底部抽屉 */}
       <AnimatePresence>
@@ -240,18 +262,18 @@ export default function App() {
               onClick={() => setPanelOpen(true)}
               className={`
                 w-full flex flex-col items-start gap-1 px-4 py-3 rounded-xl transition-all duration-300
-                ${isMobile ? 'min-h-[52px] items-center text-center' : ''}
+                ${isMobile ? 'min-h-[52px] items-center text-center mobile-cta-btn' : ''}
                 ${isInner
                   ? 'glass-inner hover:shadow-[0_0_20px_rgba(15,240,252,0.2)]'
                   : 'glass-outer hover:shadow-[0_0_20px_rgba(255,107,53,0.2)]'
                 }
               `}
             >
-              <p className="text-xs font-bold inline-flex items-center gap-1" style={{ color: isInner ? '#0ff0fc' : '#ff6b35' }}>
+              <p className="text-xs font-bold inline-flex items-center gap-1 text-theme-primary">
                 <Sparkles size={14} />
                 {isInner ? '进入里世界' : '进入表世界'}
               </p>
-              <p className={`text-[11px] opacity-50 ${isMobile ? 'text-center' : ''}`} style={{ color: isInner ? '#c8e6f5' : '#fff3e0' }}>
+              <p className={`text-[11px] opacity-55 text-theme-body ${isMobile ? 'text-center' : ''}`}>
                 {isInner ? '倾诉 · 种植情绪 · 时空感通' : '吐槽 · 文豪改写 · 战力雷达'}
               </p>
             </button>
@@ -259,11 +281,13 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      <div className={`absolute z-40 pointer-events-none ${isMobile ? 'bottom-1 left-3 opacity-30' : 'bottom-2 right-4 opacity-20'}`}>
-        <p className="text-[10px] font-mono" style={{ color: isInner ? '#0ff0fc' : '#ff6b35' }}>
-          {isMobile ? 'BJTU · QF' : `Quantum Fireworks · BJTU · ${new Date().getFullYear()}`}
-        </p>
-      </div>
+      {(!isMobile || isPanelOpen) && (
+        <div className={`absolute z-40 pointer-events-none ${isMobile ? 'bottom-1 left-3 opacity-25' : 'bottom-2 right-4 opacity-20'}`}>
+          <p className="text-[10px] font-mono text-theme-primary">
+            {isMobile ? 'BJTU · QF' : `Quantum Fireworks · BJTU · ${new Date().getFullYear()}`}
+          </p>
+        </div>
+      )}
 
       <ParticleLayer world={world} isMobile={isMobile} />
     </div>
