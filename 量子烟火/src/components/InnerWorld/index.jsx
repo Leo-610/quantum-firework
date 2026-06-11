@@ -9,6 +9,7 @@ import { BJTU_LANDMARKS } from '../../api/amap'
 import Sigil from '../Sigil'
 import EchoCard from './EchoCard'
 import PlantEffect from './PlantEffect'
+import PsychDisclaimer from './PsychDisclaimer'
 
 const LOCATIONS = [
   { id: 'siyuan',  name: '思源楼',     Icon: Landmark },
@@ -102,6 +103,8 @@ export default function InnerWorldPanel({ isMobile = false }) {
           <p className="text-xs text-cyan-400/50 mt-1 font-mono">INNER WORLD · 量子共鸣</p>
         </div>
       </div>
+
+      <PsychDisclaimer />
 
       {/* 位置选择 */}
       <div>

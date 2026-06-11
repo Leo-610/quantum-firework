@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import * as echarts from 'echarts'
 import { motion } from 'framer-motion'
 import { Gauge, Info } from 'lucide-react'
+import { RadarDataNotice } from './OuterFoodDisclaimer'
 
 const INDICATORS = [
   { name: '性价比',    max: 10 },
@@ -169,6 +170,8 @@ export default function RadarChart({ data, title, rarityClass = 'rarity-rare', i
           </div>
         </details>
       )}
+
+      <RadarDataNotice />
     </motion.div>
   )
 }

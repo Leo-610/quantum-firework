@@ -2,6 +2,8 @@
 // 高德地图 API 封装 v2 - POI 校园内定位
 // ═══════════════════════════════════
 
+import { COUNSELING_CENTER } from '../constants/disclaimers.js'
+
 /** 北交大校园中心坐标（实测标定）& 搜索半径 */
 const BJTU_CENTER = [116.3415, 39.9512]
 const BJTU_RADIUS = 800  // 米，覆盖整个主校区
@@ -90,8 +92,9 @@ export const BJTU_LANDMARKS = [
       relation: '北交大交通与土木相关学科注重工程实践，与其“学以致用”理念相契合。',
       legacy: '象征严谨求实与工程创新。',
     },
-    tags: ['桥梁工程', '学以致用', '严谨求实'],
+    tags: ['严谨求实', '学以致用'],
   },
+  COUNSELING_CENTER,
 ]
 
 /**
@@ -202,10 +205,15 @@ export function addLandmarkMarkers(map, landmarks, onMarkerClick) {
     const isCanteen = lm.type === 'canteen'
     const isOutdoor = lm.type === 'outdoor'
     const isHeritage = lm.type === 'heritage'
+    const isCounseling = lm.type === 'counseling'
 
-    const color      = isHeritage ? '#f7d27d' : (isCanteen ? '#ff6b35' : '#0ff0fc')
-    const colorDim   = isHeritage ? '#ffb84a' : (isCanteen ? '#f5a623' : '#7b2fff')
-    const size       = isHeritage ? 36 : (isCanteen ? 40 : 32)
+    const color = isCounseling ? '#6ee7b7'
+      : isHeritage ? '#f7d27d'
+      : (isCanteen ? '#ff6b35' : '#0ff0fc')
+    const colorDim = isCounseling ? '#34d399'
+      : isHeritage ? '#ffb84a'
+      : (isCanteen ? '#f5a623' : '#7b2fff')
+    const size = isCounseling ? 38 : (isHeritage ? 36 : (isCanteen ? 40 : 32))
 
     const svgContent = `
       <svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 40 40">
@@ -214,6 +222,7 @@ export function addLandmarkMarkers(map, landmarks, onMarkerClick) {
         <circle cx="20" cy="20" r="5"  fill="${color}" opacity="0.95"/>
         ${isCanteen ? `<circle cx="20" cy="20" r="14" fill="none" stroke="${color}" stroke-width="0.5" stroke-dasharray="3 2" opacity="0.5"/>` : ''}
         ${isHeritage ? `<circle cx="20" cy="20" r="15" fill="none" stroke="${color}" stroke-width="0.6" stroke-dasharray="2 3" opacity="0.6"/>` : ''}
+        ${isCounseling ? `<path d="M20 14c-3 0-5.5 2.2-5.5 5 0 4 5.5 9 5.5 9s5.5-5 5.5-9c0-2.8-2.5-5-5.5-5z" fill="${color}" opacity="0.85"/>` : ''}
       </svg>
     `
 
@@ -227,7 +236,7 @@ export function addLandmarkMarkers(map, landmarks, onMarkerClick) {
       position: [lm.lng, lm.lat],
       icon,
       offset: new AMap.Pixel(-size / 2, -size / 2),
-      zIndex: isHeritage ? 170 : (isCanteen ? 160 : 130),
+      zIndex: isCounseling ? 175 : (isHeritage ? 170 : (isCanteen ? 160 : 130)),
       extData: lm,
       title: lm.name,
     })
@@ -240,13 +249,13 @@ export function addLandmarkMarkers(map, landmarks, onMarkerClick) {
       style: {
         'background-color': 'transparent',
         'border': 'none',
-        'color': isHeritage ? '#f7d27d' : (isCanteen ? '#ff6b35' : '#0ff0fc'),
+        'color': isCounseling ? '#6ee7b7' : (isHeritage ? '#f7d27d' : (isCanteen ? '#ff6b35' : '#0ff0fc')),
         'font-size': '11px',
         'font-family': 'JetBrains Mono, monospace',
-        'text-shadow': `0 0 6px ${isHeritage ? '#f7d27d' : (isCanteen ? '#ff6b35' : '#0ff0fc')}`,
+        'text-shadow': `0 0 6px ${isCounseling ? '#6ee7b7' : (isHeritage ? '#f7d27d' : (isCanteen ? '#ff6b35' : '#0ff0fc'))}`,
         'white-space': 'nowrap',
       },
-      zIndex: isHeritage ? 171 : (isCanteen ? 161 : 131),
+      zIndex: isCounseling ? 176 : (isHeritage ? 171 : (isCanteen ? 161 : 131)),
     })
 
     marker.on('click', () => onMarkerClick?.(lm))

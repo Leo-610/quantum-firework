@@ -6,6 +6,7 @@ import { BJTU_LANDMARKS, flyTo } from '../../api/amap'
 import { useWorldStore } from '../../store/worldStore'
 import RadarChart from './RadarChart'
 import StyleRewriter from './StyleRewriter'
+import OuterFoodDisclaimer, { FoodResultNotice } from './OuterFoodDisclaimer'
 import Sigil from '../Sigil'
 
 const CANTEENS = [
@@ -91,6 +92,8 @@ export default function OuterWorldPanel({ isMobile = false }) {
           <p className="text-xs text-orange-400/50 mt-1 font-mono">OUTER WORLD · 虎扑烟火</p>
         </div>
       </div>
+
+      <OuterFoodDisclaimer />
 
       {/* 食堂选择 */}
       <div>
@@ -205,6 +208,7 @@ export default function OuterWorldPanel({ isMobile = false }) {
               <p className="text-sm text-orange-100/85 leading-relaxed">
                 {result.rewritten_text}
               </p>
+              <FoodResultNotice />
             </div>
 
             {/* 五维雷达图 */}

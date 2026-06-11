@@ -3,6 +3,7 @@ import { useMap } from '../../hooks/useMapMarker'
 import { useWorldStore } from '../../store/worldStore'
 import { useEmotionStore } from '../../store/emotionStore'
 import HeritageStoryCard from './HeritageStoryCard'
+import CounselingCard from './CounselingCard'
 import EmotionParticles from './EmotionParticles'
 import BJTULights from './BJTULights'
 
@@ -50,6 +51,9 @@ export default function MapCanvas() {
 
       {/* 校园历史地标故事卡 */}
       <HeritageStoryCard />
+
+      {/* 心理素质教育中心 */}
+      <CounselingCard />
 
       {/* 领域能量圈 */}
       <div
