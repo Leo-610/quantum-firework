@@ -7,7 +7,8 @@
     <link rel="manifest" href="/manifest.json" />
     <link rel="preload" href="/app-icon.png" as="image" />
     <link rel="preload" href="/logo-horizontal.png" as="image" />
-    <link rel="preload" href="/bjtu-badge.png" as="image" />
+    <link rel="preload" href="/bjtu-badge-white.png" as="image" />
+    <link rel="preload" href="/bjtu-wordmark-light.png" as="image" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#050a18" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -35,8 +36,8 @@
     <div id="qf-inline-splash" aria-hidden="true">
       <div class="qf-inline-splash__grid"></div>
       <div class="qf-inline-splash__core">
-        <img class="qf-inline-splash__badge" src="/bjtu-badge.png" alt="" width="56" height="56" />
-        <p class="qf-inline-splash__bjtu">BJTU · 北京交通大学</p>
+        <img class="qf-inline-splash__badge" src="/bjtu-badge-white.png" alt="" width="56" height="56" />
+        <img class="qf-inline-splash__wordmark" src="/bjtu-wordmark-light.png" alt="北京交通大学" />
         <img class="qf-inline-splash__icon" src="/app-icon.png" alt="" width="96" height="96" />
         <img class="qf-inline-splash__logo" src="/logo-horizontal.png" alt="量子烟火" />
       </div>
@@ -69,16 +70,17 @@
       .qf-inline-splash__badge {
         width: 56px; height: 56px;
         object-fit: contain;
-        margin: 0 auto 6px;
+        margin: 0 auto 8px;
         display: block;
-        filter: drop-shadow(0 0 10px rgba(15,240,252,0.35));
+        filter: drop-shadow(0 0 12px rgba(15,240,252,0.45));
       }
-      .qf-inline-splash__bjtu {
-        font-family: 'JetBrains Mono', 'Noto Sans SC', sans-serif;
-        font-size: 0.58rem;
-        letter-spacing: 0.1em;
-        color: rgba(200,230,245,0.5);
-        margin: 0 0 16px;
+      .qf-inline-splash__wordmark {
+        width: min(70vw, 200px);
+        height: auto;
+        margin: 0 auto 16px;
+        display: block;
+        opacity: 0.85;
+        filter: drop-shadow(0 0 8px rgba(15,240,252,0.15));
       }
       .qf-inline-splash__icon {
         width: 96px; height: 96px;

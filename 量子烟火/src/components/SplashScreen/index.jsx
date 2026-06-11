@@ -1,6 +1,11 @@
 import React, { useMemo } from 'react'
 import { motion } from 'framer-motion'
-import { APP_ICON, LOGO_HORIZONTAL, BJTU_BADGE } from '../BrandAssets'
+import {
+  APP_ICON,
+  LOGO_HORIZONTAL,
+  BJTU_BADGE_WHITE,
+  BJTU_WORDMARK_LIGHT,
+} from '../BrandAssets'
 
 const BURST_COUNT = 24
 
@@ -13,13 +18,13 @@ function BJTUBrand({ blend = 0 }) {
       transition={{ delay: 0.1, duration: 0.6 }}
     >
       <div
-        className="splash-bjtu-badge-wrap"
+        className="splash-bjtu-badge-wrap splash-bjtu-badge-wrap--dark"
         style={{
           boxShadow: `0 0 28px color-mix(in srgb, #0ff0fc ${70 - blend * 35}%, #ff6b35 ${blend * 35}%)`,
         }}
       >
         <motion.img
-          src={BJTU_BADGE}
+          src={BJTU_BADGE_WHITE}
           alt="北京交通大学校徽"
           className="splash-bjtu-badge"
           animate={{ rotate: [0, 2, -2, 0] }}
@@ -27,10 +32,11 @@ function BJTUBrand({ blend = 0 }) {
         />
         <div className="splash-bjtu-badge-ring" aria-hidden="true" />
       </div>
-      <div className="splash-bjtu-text">
-        <span className="splash-bjtu-en">BJTU</span>
-        <span className="splash-bjtu-cn">北京交通大学</span>
-      </div>
+      <img
+        src={BJTU_WORDMARK_LIGHT}
+        alt="北京交通大学 Beijing Jiaotong University"
+        className="splash-bjtu-wordmark"
+      />
     </motion.div>
   )
 }
@@ -167,4 +173,4 @@ export default function SplashScreen({ progress = 0, phase = '初始化…' }) {
   )
 }
 
-export { BJTU_BADGE, BJTUBrand }
+export { BJTU_BADGE_WHITE, BJTUBrand }
