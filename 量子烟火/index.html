@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preload" href="/bjtu-badge.png" as="image" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#050a18" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -26,6 +27,87 @@
     <script src="https://lf-cdn.coze.cn/obj/unpkg/latest/coze/web-sdk/dist/js-umd/index.min.js"></script>
   </head>
   <body>
+    <!-- JS 加载前的静态启动屏（React 就绪后移除） -->
+    <div id="qf-inline-splash" aria-hidden="true">
+      <div class="qf-inline-splash__grid"></div>
+      <div class="qf-inline-splash__core">
+        <img class="qf-inline-splash__badge" src="/bjtu-badge.png" alt="" width="72" height="72" />
+        <p class="qf-inline-splash__bjtu">BJTU · 北京交通大学</p>
+        <div class="qf-inline-splash__ring"></div>
+        <p class="qf-inline-splash__title">量子烟火</p>
+        <p class="qf-inline-splash__sub">QUANTUM FIREWORKS</p>
+      </div>
+    </div>
+    <style>
+      #qf-inline-splash {
+        position: fixed;
+        inset: 0;
+        z-index: 99999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #050a18;
+        overflow: hidden;
+      }
+      .qf-inline-splash__grid {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(15,240,252,0.06) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(15,240,252,0.06) 1px, transparent 1px);
+        background-size: 40px 40px;
+        animation: qf-grid-drift 20s linear infinite;
+      }
+      @keyframes qf-grid-drift {
+        from { transform: translateY(0); }
+        to { transform: translateY(40px); }
+      }
+      .qf-inline-splash__core { text-align: center; z-index: 1; }
+      .qf-inline-splash__badge {
+        width: 72px; height: 72px;
+        object-fit: contain;
+        margin: 0 auto 10px;
+        display: block;
+        filter: drop-shadow(0 0 12px rgba(15,240,252,0.4));
+        animation: qf-badge-float 3s ease-in-out infinite;
+      }
+      @keyframes qf-badge-float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-4px); }
+      }
+      .qf-inline-splash__bjtu {
+        font-family: 'JetBrains Mono', 'Noto Sans SC', sans-serif;
+        font-size: 0.62rem;
+        letter-spacing: 0.12em;
+        color: rgba(200,230,245,0.55);
+        margin: 0 0 14px;
+      }
+      .qf-inline-splash__ring {
+        width: 64px; height: 64px;
+        margin: 0 auto 16px;
+        border: 2px solid rgba(15,240,252,0.5);
+        border-radius: 50%;
+        box-shadow: 0 0 24px rgba(15,240,252,0.35);
+        animation: qf-ring-spin 2s linear infinite;
+      }
+      @keyframes qf-ring-spin { to { transform: rotate(360deg); } }
+      .qf-inline-splash__title {
+        font-family: 'Noto Sans SC', sans-serif;
+        font-size: 1.75rem;
+        font-weight: 700;
+        letter-spacing: 0.2em;
+        color: #0ff0fc;
+        text-shadow: 0 0 20px rgba(15,240,252,0.6);
+        margin: 0;
+      }
+      .qf-inline-splash__sub {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.65rem;
+        letter-spacing: 0.25em;
+        color: rgba(200,230,245,0.45);
+        margin: 8px 0 0;
+      }
+    </style>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

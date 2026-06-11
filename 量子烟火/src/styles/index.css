@@ -1214,3 +1214,326 @@ html, body {
 
 /* 粒子通用样式已通过 JS canvas 动态设置 */
 
+/* ═══════════════════════════════════
+   启动屏 Splash Screen
+   ═══════════════════════════════════ */
+.splash-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(900px 600px at 50% 30%, rgba(15, 240, 252, 0.12), transparent 60%),
+    radial-gradient(700px 500px at 80% 70%, rgba(255, 107, 53, 0.1), transparent 55%),
+    linear-gradient(180deg, #050a18 0%, #020710 100%);
+  overflow: hidden;
+}
+
+.splash-grid {
+  position: absolute;
+  inset: -20%;
+  background-image:
+    linear-gradient(rgba(15, 240, 252, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 240, 252, 0.07) 1px, transparent 1px);
+  background-size: 48px 48px;
+  animation: splash-grid-move 24s linear infinite;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black 20%, transparent 75%);
+}
+
+@keyframes splash-grid-move {
+  from { transform: translate(0, 0) perspective(400px) rotateX(8deg); }
+  to { transform: translate(-24px, 24px) perspective(400px) rotateX(8deg); }
+}
+
+.splash-scanline {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.04) 2px,
+    rgba(0, 0, 0, 0.04) 4px
+  );
+  pointer-events: none;
+}
+
+.splash-rings {
+  position: absolute;
+  width: min(90vw, 420px);
+  height: min(90vw, 420px);
+  pointer-events: none;
+}
+
+.splash-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid transparent;
+}
+
+.splash-ring--cyan {
+  border-color: rgba(15, 240, 252, 0.25);
+  box-shadow: 0 0 40px rgba(15, 240, 252, 0.15), inset 0 0 30px rgba(15, 240, 252, 0.05);
+}
+
+.splash-ring--orange {
+  inset: 12%;
+  border-color: rgba(255, 107, 53, 0.35);
+  box-shadow: 0 0 30px rgba(255, 107, 53, 0.2);
+}
+
+.splash-center {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0 24px;
+  margin-top: 4vh;
+}
+
+/* 北交大校徽区 */
+.splash-bjtu {
+  position: absolute;
+  top: max(20px, env(safe-area-inset-top));
+  left: 0;
+  right: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.splash-bjtu-badge-wrap {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.splash-bjtu-badge {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 50%;
+}
+
+.splash-bjtu-badge-ring {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1px solid rgba(15, 240, 252, 0.45);
+  animation: splash-badge-ring 3s ease-in-out infinite;
+}
+
+@keyframes splash-badge-ring {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.06); }
+}
+
+.splash-bjtu-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.splash-bjtu-en {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.35em;
+  text-indent: 0.35em;
+  color: rgba(15, 240, 252, 0.85);
+  text-shadow: 0 0 12px rgba(15, 240, 252, 0.35);
+}
+
+.splash-bjtu-cn {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: rgba(200, 230, 245, 0.5);
+}
+
+.splash-bjtu--compact .splash-bjtu-badge-wrap {
+  width: 56px;
+  height: 56px;
+}
+
+.splash-bjtu--compact .splash-bjtu-cn {
+  display: none;
+}
+
+.splash-sigil-stack {
+  position: relative;
+  width: 88px;
+  height: 88px;
+  margin-bottom: 20px;
+}
+
+.splash-sigil-layer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.splash-sigil-layer--overlay {
+  pointer-events: none;
+}
+
+.splash-title {
+  font-family: 'Outfit', 'Noto Sans SC', sans-serif;
+  font-size: clamp(2rem, 8vw, 2.75rem);
+  font-weight: 800;
+  letter-spacing: 0.28em;
+  text-indent: 0.28em;
+  background: linear-gradient(
+    135deg,
+    #0ff0fc 0%,
+    #7b2fff calc(40% + var(--splash-blend, 0) * 20%),
+    #ff6b35 calc(60% + var(--splash-blend, 0) * 30%),
+    #f5a623 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 24px rgba(15, 240, 252, 0.35));
+  margin: 0;
+}
+
+.splash-subtitle {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(0.6rem, 2.5vw, 0.72rem);
+  letter-spacing: 0.22em;
+  color: rgba(200, 230, 245, 0.55);
+  margin: 10px 0 0;
+}
+
+.splash-tagline {
+  font-size: clamp(0.65rem, 2.8vw, 0.75rem);
+  color: rgba(200, 230, 245, 0.38);
+  margin: 8px 0 0;
+  letter-spacing: 0.06em;
+}
+
+.splash-progress-wrap {
+  position: absolute;
+  bottom: max(28px, env(safe-area-inset-bottom));
+  left: 24px;
+  right: 24px;
+  z-index: 3;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.splash-progress-track {
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.splash-progress-bar {
+  height: 100%;
+  border-radius: inherit;
+  transition: width 0.35s ease;
+}
+
+.splash-progress-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  gap: 12px;
+}
+
+.splash-phase {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: rgba(200, 230, 245, 0.55);
+  letter-spacing: 0.04em;
+}
+
+.splash-percent {
+  font-size: 11px;
+  color: rgba(15, 240, 252, 0.75);
+}
+
+.splash-burst {
+  position: absolute;
+  left: 50%;
+  top: 42%;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.splash-burst-dot {
+  position: absolute;
+  border-radius: 50%;
+  box-shadow: 0 0 8px currentColor;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .splash-grid,
+  .splash-ring,
+  .splash-ring--cyan,
+  .splash-ring--orange,
+  .splash-bjtu-badge-ring {
+    animation: none !important;
+  }
+
+  .splash-bjtu-badge {
+    animation: none !important;
+  }
+
+  .splash-screen {
+    transition: opacity 0.2s ease !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .splash-center {
+    margin-top: 8vh;
+  }
+
+  .splash-bjtu-badge-wrap {
+    width: 68px;
+    height: 68px;
+  }
+
+  .splash-bjtu-en {
+    font-size: 11px;
+    letter-spacing: 0.28em;
+    text-indent: 0.28em;
+  }
+
+  .splash-bjtu-cn {
+    font-size: 10px;
+  }
+
+  .splash-sigil-stack {
+    width: 76px;
+    height: 76px;
+  }
+
+  .splash-title {
+    letter-spacing: 0.18em;
+    text-indent: 0.18em;
+  }
+}
+
