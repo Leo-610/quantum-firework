@@ -21,6 +21,11 @@ const LOCATIONS = [
 ]
 
 function getLiveCoords(id) {
+  // 红果园情绪落点：主校区红果园餐厅一带（地图不再单独标注错误远点）
+  if (id === 'garden') {
+    const hgy = BJTU_LANDMARKS.find(lm => lm.id === 'canteen_hgyfood')
+    if (hgy) return { lng: hgy.lng, lat: hgy.lat }
+  }
   const found = BJTU_LANDMARKS.find(lm => lm.id === id)
   if (found) return { lng: found.lng, lat: found.lat }
   return null

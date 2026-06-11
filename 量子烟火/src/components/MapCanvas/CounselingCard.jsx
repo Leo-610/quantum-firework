@@ -38,6 +38,9 @@ export default function CounselingCard() {
             <HeartHandshake size={18} className="counseling-icon" />
             <div>
               <p className="counseling-title">{landmark.name}</p>
+              {info.building && (
+                <p className="counseling-building">{info.building}</p>
+              )}
               <p className="counseling-subtitle">{info.org}</p>
             </div>
           </div>

@@ -1033,6 +1033,11 @@ html, body {
   margin: 0;
 }
 
+.psych-disclaimer__building {
+  font-weight: 600;
+  color: rgba(110, 231, 183, 0.85);
+}
+
 .psych-disclaimer__text,
 .psych-disclaimer__address {
   font-size: 11px;
@@ -1262,6 +1267,13 @@ html, body {
   font-weight: 700;
   color: rgba(240, 255, 250, 0.95);
   margin: 0;
+}
+
+.counseling-building {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--counseling-accent);
+  margin: 2px 0 0;
 }
 
 .counseling-subtitle {

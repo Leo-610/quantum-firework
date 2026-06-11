@@ -54,11 +54,6 @@ export const BJTU_LANDMARKS = [
     lng: 116.342621, lat: 39.948929, // ✅ 实测
   },
   {
-    id: 'garden', name: '红果园', type: 'outdoor',
-    poiKeywords: ['北京交通大学红果园', '红果园', '红果园餐厅'],
-    lng: 116.349200, lat: 39.954500, // ✅ 备用坐标
-  },
-  {
     id: 'statue_mao', name: '毛主席像', type: 'heritage',
     poiKeywords: ['毛主席像 北京交通大学', '北交大 毛主席像', '北京交通大学 毛主席像'],
     lng: 116.341800, lat: 39.952050, // 近似坐标，后续 POI 自动修正

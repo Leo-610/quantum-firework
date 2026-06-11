@@ -45,6 +45,9 @@ export default function PsychDisclaimer() {
       {open && (
         <div className="psych-disclaimer__panel">
           <p className="psych-disclaimer__org">{info.org}</p>
+          {info.building && (
+            <p className="psych-disclaimer__text psych-disclaimer__building">{info.building}</p>
+          )}
           <p className="psych-disclaimer__text">{info.service}</p>
           <p className="psych-disclaimer__text">{info.audience}</p>
 
