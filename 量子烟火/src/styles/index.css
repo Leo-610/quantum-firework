@@ -1375,6 +1375,25 @@ html, body {
   display: none;
 }
 
+.splash-app-icon-wrap {
+  margin-bottom: 16px;
+}
+
+.splash-app-icon {
+  width: 112px;
+  height: 112px;
+  object-fit: contain;
+  border-radius: 22px;
+}
+
+.splash-logo-horizontal {
+  width: min(92vw, 360px);
+  height: auto;
+  margin: 0 auto 10px;
+  display: block;
+  filter: drop-shadow(0 4px 24px rgba(0, 0, 0, 0.35));
+}
+
 .splash-sigil-stack {
   position: relative;
   width: 88px;
@@ -1508,7 +1527,17 @@ html, body {
 
 @media (max-width: 640px) {
   .splash-center {
-    margin-top: 8vh;
+    margin-top: 6vh;
+  }
+
+  .splash-app-icon {
+    width: 88px;
+    height: 88px;
+    border-radius: 18px;
+  }
+
+  .splash-logo-horizontal {
+    width: min(94vw, 300px);
   }
 
   .splash-bjtu-badge-wrap {

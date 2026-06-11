@@ -1,16 +1,13 @@
 import React, { useMemo } from 'react'
 import { motion } from 'framer-motion'
-import { Atom, Flame } from 'lucide-react'
-import Sigil from '../Sigil'
+import { APP_ICON, LOGO_HORIZONTAL, BJTU_BADGE } from '../BrandAssets'
 
-const BJTU_BADGE = '/bjtu-badge.png'
 const BURST_COUNT = 24
 
-/** 北交大校徽 + BJTU 标识 */
-function BJTUBrand({ blend = 0, compact = false }) {
+function BJTUBrand({ blend = 0 }) {
   return (
     <motion.div
-      className={`splash-bjtu ${compact ? 'splash-bjtu--compact' : ''}`}
+      className="splash-bjtu"
       initial={{ opacity: 0, y: -12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1, duration: 0.6 }}
@@ -38,7 +35,7 @@ function BJTUBrand({ blend = 0, compact = false }) {
   )
 }
 
-/** 量子烟火 · 启动屏（里世界量子 → 表世界烟火） */
+/** 量子烟火 · 启动屏 */
 export default function SplashScreen({ progress = 0, phase = '初始化…' }) {
   const burst = useMemo(
     () => Array.from({ length: BURST_COUNT }, (_, i) => ({
@@ -85,51 +82,41 @@ export default function SplashScreen({ progress = 0, phase = '初始化…' }) {
 
       <div className="splash-center">
         <motion.div
-          className="splash-sigil-stack"
-          initial={{ scale: 0.6, opacity: 0 }}
+          className="splash-app-icon-wrap"
+          initial={{ scale: 0.5, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
         >
-          <motion.div
-            className="splash-sigil-layer"
-            animate={{ opacity: 1 - blend, scale: 1 - blend * 0.12 }}
-            transition={{ duration: 0.4 }}
-          >
-            <Sigil variant="inner" icon={Atom} size={72} />
-          </motion.div>
-          <motion.div
-            className="splash-sigil-layer splash-sigil-layer--overlay"
-            animate={{ opacity: blend, scale: 0.88 + blend * 0.12 }}
-            transition={{ duration: 0.4 }}
-          >
-            <Sigil variant="outer" icon={Flame} size={72} />
-          </motion.div>
+          <motion.img
+            src={APP_ICON}
+            alt=""
+            className="splash-app-icon"
+            animate={{
+              scale: [1, 1.04, 1],
+              filter: [
+                'drop-shadow(0 0 20px rgba(15,240,252,0.45))',
+                `drop-shadow(0 0 28px rgba(255,107,53,${0.25 + blend * 0.35}))`,
+                'drop-shadow(0 0 20px rgba(15,240,252,0.45))',
+              ],
+            }}
+            transition={{ duration: 2.8, repeat: Infinity, ease: 'easeInOut' }}
+          />
         </motion.div>
 
-        <motion.h1
-          className="splash-title"
-          style={{ '--splash-blend': blend }}
-          initial={{ opacity: 0, y: 16 }}
+        <motion.img
+          src={LOGO_HORIZONTAL}
+          alt="量子烟火 Quantum Fireworks"
+          className="splash-logo-horizontal"
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.25, duration: 0.7 }}
-        >
-          量子烟火
-        </motion.h1>
-
-        <motion.p
-          className="splash-subtitle"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.85, duration: 0.5 }}
-        >
-          QUANTUM FIREWORKS
-        </motion.p>
+          transition={{ delay: 0.35, duration: 0.65 }}
+        />
 
         <motion.p
           className="splash-tagline"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1.05, duration: 0.5 }}
+          transition={{ delay: 0.9, duration: 0.5 }}
         >
           里世界 · 量子共鸣 &nbsp;|&nbsp; 表世界 · 虎扑烟火
         </motion.p>

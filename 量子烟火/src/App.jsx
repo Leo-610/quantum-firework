@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { v4 as uuidv4 } from 'uuid'
-import { Atom, Flame, Menu, X, Sparkles, ChevronDown } from 'lucide-react'
+import { Menu, X, Sparkles, ChevronDown, Atom, Flame } from 'lucide-react'
+import { AppIconMark } from './components/BrandAssets'
 import MapCanvas from './components/MapCanvas'
 import WorldSwitch from './components/WorldSwitch'
 import InnerWorldPanel from './components/InnerWorld'
@@ -10,10 +11,14 @@ import { useWorldStore } from './store/worldStore'
 import { useEmotionStore } from './store/emotionStore'
 import { useIsMobile } from './hooks/useMediaQuery'
 
+import { useAppBoot } from './hooks/useAppBoot'
+import SplashScreen from './components/SplashScreen'
+
 export default function App() {
   const { world, isPanelOpen, setPanelOpen, userId, setUserId, mapInstance } = useWorldStore()
   const loadPlantsToHeatmap = useEmotionStore(s => s.loadPlantsToHeatmap)
   const isMobile = useIsMobile()
+  const { complete: bootComplete, progress, phase } = useAppBoot()
 
   useEffect(() => {
     if (!userId) {
@@ -52,8 +57,10 @@ export default function App() {
     : { initial: { x: -320, opacity: 0 }, animate: { x: 0, opacity: 1 }, exit: { x: -320, opacity: 0 } }
 
   return (
+    <>
     <div
-      className={`relative w-full h-screen overflow-hidden world-shell world-transition ${isInner ? 'world-inner' : 'world-outer'}`}
+      className={`relative w-full h-screen overflow-hidden world-shell world-transition ${isInner ? 'world-inner' : 'world-outer'} ${bootComplete ? '' : 'pointer-events-none'}`}
+      aria-hidden={!bootComplete}
     >
       <MapCanvas />
 
@@ -63,15 +70,7 @@ export default function App() {
       {isMobile ? (
         <div className="mobile-top-bar absolute top-0 left-0 right-0 z-50 flex items-center justify-between px-3 pt-safe">
           <div className="hud-glass flex items-center gap-2 px-2.5 py-1.5 rounded-xl">
-            <div
-              className="w-7 h-7 rounded-lg flex items-center justify-center"
-              style={{
-                background: isInner ? 'rgba(15,240,252,0.1)' : 'rgba(255,107,53,0.12)',
-                border: `1px solid ${isInner ? 'rgba(15,240,252,0.3)' : 'rgba(255,107,53,0.35)'}`,
-              }}
-            >
-              {isInner ? <Atom size={14} /> : <Flame size={14} />}
-            </div>
+            <AppIconMark size={28} />
             <span className="text-xs font-bold font-display" style={{ color: isInner ? '#0ff0fc' : '#ff6b35' }}>
               量子烟火
             </span>
@@ -94,16 +93,8 @@ export default function App() {
         <>
           <WorldSwitch />
           <div className="absolute top-4 left-4 z-50 desktop-only">
-            <div className="hud-glass flex items-center gap-2 px-3 py-2 rounded-xl">
-              <div
-                className="w-8 h-8 rounded-lg flex items-center justify-center text-base"
-                style={{
-                  background: isInner ? 'rgba(15,240,252,0.1)' : 'rgba(255,107,53,0.12)',
-                  border: `1px solid ${isInner ? 'rgba(15,240,252,0.3)' : 'rgba(255,107,53,0.35)'}`,
-                }}
-              >
-                {isInner ? <Atom size={16} /> : <Flame size={16} />}
-              </div>
+            <div className="hud-glass flex items-center gap-2.5 px-3 py-2 rounded-xl">
+              <AppIconMark size={36} />
               <div>
                 <p className="text-sm font-bold font-display" style={{ color: isInner ? '#0ff0fc' : '#ff6b35' }}>
                   量子烟火
@@ -276,6 +267,13 @@ export default function App() {
 
       <ParticleLayer world={world} isMobile={isMobile} />
     </div>
+
+    <AnimatePresence>
+      {!bootComplete && (
+        <SplashScreen progress={progress} phase={phase} />
+      )}
+    </AnimatePresence>
+    </>
   )
 }
 
