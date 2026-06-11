@@ -32,7 +32,11 @@ export const useWorldStore = create((set, get) => ({
     }, 800)
   },
 
-  setSelectedLandmark: (landmark) => set({ selectedLandmark: landmark, isPanelOpen: !!landmark }),
+  // 地图信息卡展示时收起面板，避免遮挡卡片内容
+  setSelectedLandmark: (landmark) => set({
+    selectedLandmark: landmark,
+    ...(landmark ? { isPanelOpen: false } : {}),
+  }),
 
   setMapInstance: (map) => set({ mapInstance: map }),
 

@@ -10,7 +10,10 @@ export default function PsychDisclaimer() {
   const mapInstance = useWorldStore(s => s.mapInstance)
   const setSelectedLandmark = useWorldStore(s => s.setSelectedLandmark)
 
+  const setPanelOpen = useWorldStore(s => s.setPanelOpen)
+
   const showOnMap = () => {
+    setPanelOpen(false)
     setSelectedLandmark(COUNSELING_CENTER)
     if (mapInstance) {
       flyTo(mapInstance, {

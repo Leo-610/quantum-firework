@@ -1024,6 +1024,10 @@ html, body {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  max-height: min(52vh, 420px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
 .psych-disclaimer__org {
@@ -1215,10 +1219,12 @@ html, body {
 /* ─── 心理中心地图卡片 ─── */
 .counseling-card-wrap {
   position: absolute;
-  left: 16px;
-  right: 16px;
-  bottom: calc(88px + env(safe-area-inset-bottom));
-  z-index: 45;
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%);
+  z-index: 65;
+  width: min(560px, calc(100% - 32px));
+  max-height: calc(100vh - 48px);
   pointer-events: auto;
 }
 
@@ -1231,6 +1237,10 @@ html, body {
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.35), 0 0 18px color-mix(in srgb, var(--counseling-accent) 25%, transparent);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
+  max-height: calc(100vh - 80px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
 .counseling-close {
@@ -1637,7 +1647,16 @@ html, body {
   }
 
   .counseling-card-wrap {
-    bottom: calc(96px + env(safe-area-inset-bottom));
+    left: 12px;
+    right: 12px;
+    bottom: calc(20px + env(safe-area-inset-bottom));
+    transform: none;
+    width: auto;
+    max-height: min(62vh, calc(100vh - 100px));
+  }
+
+  .counseling-card {
+    max-height: min(58vh, calc(100vh - 120px));
   }
 
   .neon-text-cyan,
