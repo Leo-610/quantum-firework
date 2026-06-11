@@ -36,7 +36,7 @@ export const BJTU_LANDMARKS = [
   {
     id: 'library', name: '图书馆', type: 'academic',
     poiKeywords: ['北京交通大学图书馆', '交大图书馆'],
-    lng: 116.338800, lat: 39.952200, // ✅ 用户确认正确
+    lng: 116.343430, lat: 39.952100, // ✅ 实测
   },
   {
     id: 'lab', name: '计算机学院', type: 'academic',
@@ -56,7 +56,7 @@ export const BJTU_LANDMARKS = [
   {
     id: 'statue_mao', name: '毛主席像', type: 'heritage',
     poiKeywords: ['毛主席像 北京交通大学', '北交大 毛主席像', '北京交通大学 毛主席像'],
-    lng: 116.341800, lat: 39.952050, // 近似坐标，后续 POI 自动修正
+    lng: 116.342100, lat: 39.950509, // ✅ 实测
     story: {
       title: '校园精神地标',
       summary: '作为校园精神地标之一，毛主席像见证了一代代交大学子在此求知与成长。',
@@ -68,7 +68,7 @@ export const BJTU_LANDMARKS = [
   {
     id: 'statue_zhan', name: '詹天佑像', type: 'heritage',
     poiKeywords: ['詹天佑像 北京交通大学', '北交大 詹天佑像', '詹天佑像 交大'],
-    lng: 116.342900, lat: 39.951600, // 近似坐标，后续 POI 自动修正
+    lng: 116.341002, lat: 39.950167, // ✅ 实测
     story: {
       title: '中国铁路先驱',
       summary: '詹天佑主持修建京张铁路，是中国铁路工程的开拓者。',
@@ -80,7 +80,7 @@ export const BJTU_LANDMARKS = [
   {
     id: 'statue_mao_yisheng', name: '茅以升像', type: 'heritage',
     poiKeywords: ['茅以升像 北京交通大学', '北交大 茅以升像', '茅以升像 交大'],
-    lng: 116.340600, lat: 39.951900, // 近似坐标，后续 POI 自动修正
+    lng: 116.343187, lat: 39.951818, // ✅ 实测
     story: {
       title: '中国桥梁工程奠基人',
       summary: '茅以升主持修建钱塘江大桥，是中国桥梁工程的重要奠基者。',
