@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import {
   APP_ICON,
@@ -7,6 +7,7 @@ import {
   BJTU_WORDMARK_LIGHT,
   VOLCENGINE_LOGO_LIGHT,
 } from '../BrandAssets'
+import { useTypewriter } from '../../hooks/useTypewriter'
 
 const BURST_COUNT = 24
 
@@ -66,6 +67,17 @@ function SplashSponsor() {
 
 /** 量子烟火 · 启动屏 */
 export default function SplashScreen({ progress = 0, phase = '初始化…' }) {
+  const [reducedMotion, setReducedMotion] = useState(false)
+
+  useEffect(() => {
+    setReducedMotion(window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+  }, [])
+
+  const typedPhase = useTypewriter(phase, {
+    speed: reducedMotion ? 0 : 36,
+    enabled: !reducedMotion,
+  })
+
   const burst = useMemo(
     () => Array.from({ length: BURST_COUNT }, (_, i) => ({
       id: i,
@@ -79,6 +91,7 @@ export default function SplashScreen({ progress = 0, phase = '初始化…' }) {
 
   const showBurst = progress >= 92
   const blend = Math.min(1, Math.max(0, (progress - 55) / 45))
+  const showSkeleton = progress < 88
 
   return (
     <motion.div
@@ -149,10 +162,18 @@ export default function SplashScreen({ progress = 0, phase = '初始化…' }) {
         >
           里世界 · 量子共鸣 &nbsp;|&nbsp; 表世界 · 虎扑烟火
         </motion.p>
+
+        {showSkeleton && (
+          <div className="splash-skeleton" aria-hidden="true">
+            <span className="splash-skeleton__bar splash-skeleton__bar--wide" />
+            <span className="splash-skeleton__bar splash-skeleton__bar--mid" />
+            <span className="splash-skeleton__bar splash-skeleton__bar--short" />
+          </div>
+        )}
       </div>
 
       <div className="splash-progress-wrap">
-        <div className="splash-progress-track">
+        <div className={`splash-progress-track ${progress < 8 ? 'is-loading' : ''}`}>
           <motion.div
             className="splash-progress-bar"
             style={{
@@ -164,7 +185,12 @@ export default function SplashScreen({ progress = 0, phase = '初始化…' }) {
           />
         </div>
         <div className="splash-progress-meta">
-          <span className="splash-phase">{phase}</span>
+          <span className="splash-phase" aria-label={phase}>
+            {reducedMotion ? phase : typedPhase}
+            {!reducedMotion && typedPhase.length < phase.length && (
+              <span className="splash-type-cursor" aria-hidden="true">▍</span>
+            )}
+          </span>
           <span className="splash-percent font-mono">{Math.round(progress)}%</span>
         </div>
       </div>

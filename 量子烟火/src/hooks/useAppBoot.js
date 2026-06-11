@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
 
 const PHASES = [
-  { progress: 12, label: '量子场同步中…' },
-  { progress: 38, label: '加载北交大地图…' },
-  { progress: 62, label: '唤醒 Coze 智能体…' },
-  { progress: 86, label: '点燃量子烟火…' },
-  { progress: 100, label: '点火就绪' },
+  { progress: 10, label: '量子场同步中…' },
+  { progress: 28, label: '加载北交大 3D 校园地图…' },
+  { progress: 52, label: '唤醒 Coze 里表世界智能体…' },
+  { progress: 74, label: '校准思源楼 · 图书馆 · 心理中心坐标…' },
+  { progress: 92, label: '点燃量子烟火，即将进入…' },
+  { progress: 100, label: '点火就绪 · 欢迎进入' },
 ]
 
 function sleep(ms) {

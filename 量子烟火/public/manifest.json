@@ -1,7 +1,7 @@
 {
   "name": "量子烟火 · Quantum Fireworks",
   "short_name": "量子烟火",
-  "description": "北交大智慧校园情感与美食共鸣智能体",
+  "description": "北京交通大学智慧校园 Web 应用：里世界倾诉情绪、表世界吐槽美食，3D 校园地图 + Coze AI",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#050a18",

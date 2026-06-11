@@ -2059,6 +2059,50 @@ html, body {
   letter-spacing: 0.06em;
 }
 
+.splash-skeleton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: min(280px, 72vw);
+  margin-top: 18px;
+}
+
+.splash-skeleton__bar {
+  display: block;
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    rgba(15, 240, 252, 0.08) 0%,
+    rgba(15, 240, 252, 0.22) 50%,
+    rgba(15, 240, 252, 0.08) 100%
+  );
+  background-size: 200% 100%;
+  animation: splash-shimmer 1.8s ease-in-out infinite;
+}
+
+.splash-skeleton__bar--wide { width: 100%; }
+.splash-skeleton__bar--mid { width: 72%; animation-delay: 0.15s; }
+.splash-skeleton__bar--short { width: 48%; animation-delay: 0.3s; }
+
+@keyframes splash-shimmer {
+  0% { background-position: 200% 0; opacity: 0.45; }
+  100% { background-position: -200% 0; opacity: 0.85; }
+}
+
+.splash-type-cursor {
+  display: inline-block;
+  margin-left: 2px;
+  color: rgba(15, 240, 252, 0.85);
+  animation: splash-cursor-blink 0.9s step-end infinite;
+}
+
+@keyframes splash-cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
 .splash-progress-wrap {
   position: absolute;
   bottom: max(28px, env(safe-area-inset-bottom));
@@ -2124,6 +2168,20 @@ html, body {
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.08);
   overflow: hidden;
+  position: relative;
+}
+
+.splash-progress-track.is-loading::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(15, 240, 252, 0.35), transparent);
+  animation: splash-track-glow 1.6s ease-in-out infinite;
+}
+
+@keyframes splash-track-glow {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 }
 
 .splash-progress-bar {
@@ -2173,7 +2231,10 @@ html, body {
   .splash-ring,
   .splash-ring--cyan,
   .splash-ring--orange,
-  .splash-bjtu-badge-ring {
+  .splash-bjtu-badge-ring,
+  .splash-skeleton__bar,
+  .splash-type-cursor,
+  .splash-progress-track.is-loading::after {
     animation: none !important;
   }
 
