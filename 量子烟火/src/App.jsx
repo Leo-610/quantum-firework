@@ -4,6 +4,8 @@ import { v4 as uuidv4 } from 'uuid'
 import { Menu, X, Sparkles, ChevronDown, Atom, Flame } from 'lucide-react'
 import { AppIconMark } from './components/BrandAssets'
 import MapCanvas from './components/MapCanvas'
+import HeritageStoryCard from './components/MapCanvas/HeritageStoryCard'
+import CounselingCard from './components/MapCanvas/CounselingCard'
 import WorldSwitch from './components/WorldSwitch'
 import InnerWorldPanel from './components/InnerWorld'
 import OuterWorldPanel from './components/OuterWorld'
@@ -15,7 +17,7 @@ import { useAppBoot } from './hooks/useAppBoot'
 import SplashScreen from './components/SplashScreen'
 
 export default function App() {
-  const { world, isPanelOpen, setPanelOpen, userId, setUserId, mapInstance } = useWorldStore()
+  const { world, isPanelOpen, setPanelOpen, userId, setUserId, mapInstance, selectedLandmark } = useWorldStore()
   const loadPlantsToHeatmap = useEmotionStore(s => s.loadPlantsToHeatmap)
   const isMobile = useIsMobile()
   const { complete: bootComplete, progress, phase } = useAppBoot()
@@ -69,6 +71,12 @@ export default function App() {
       aria-hidden={!bootComplete}
     >
       <MapCanvas />
+
+      {/* 地图地标信息卡：置于 App 层，避免被底部 CTA 遮挡 */}
+      <div className="landmark-overlays" aria-live="polite">
+        <HeritageStoryCard />
+        <CounselingCard />
+      </div>
 
       <div className="world-atmosphere" aria-hidden="true" />
 
@@ -251,7 +259,7 @@ export default function App() {
 
       {/* 面板关闭时的入口 */}
       <AnimatePresence>
-        {!isPanelOpen && (
+        {!isPanelOpen && !selectedLandmark && (
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}

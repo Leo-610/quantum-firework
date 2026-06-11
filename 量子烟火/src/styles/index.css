@@ -1216,6 +1216,19 @@ html, body {
   color: rgba(255, 200, 160, 0.52);
 }
 
+/* ─── 地图地标信息卡浮层（App 级，高于底部 CTA） ─── */
+.landmark-overlays {
+  position: absolute;
+  inset: 0;
+  z-index: 45;
+  pointer-events: none;
+}
+
+.landmark-overlays .heritage-card-wrap,
+.landmark-overlays .counseling-card-wrap {
+  pointer-events: auto;
+}
+
 /* ─── 心理中心地图卡片 ─── */
 .counseling-card-wrap {
   position: absolute;
@@ -1637,26 +1650,34 @@ html, body {
   }
 
   .heritage-card-wrap {
-    bottom: calc(88px + env(safe-area-inset-bottom));
     left: 12px;
     right: 12px;
+    bottom: calc(12px + env(safe-area-inset-bottom));
+    max-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 76px);
   }
 
   .heritage-card {
     padding: 14px 14px 12px;
+    max-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 84px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: calc(8px + env(safe-area-inset-bottom));
   }
 
   .counseling-card-wrap {
     left: 12px;
     right: 12px;
-    bottom: calc(20px + env(safe-area-inset-bottom));
+    bottom: calc(12px + env(safe-area-inset-bottom));
     transform: none;
     width: auto;
-    max-height: min(62vh, calc(100vh - 100px));
+    max-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 76px);
   }
 
   .counseling-card {
-    max-height: min(58vh, calc(100vh - 120px));
+    max-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 84px);
+    padding-bottom: calc(8px + env(safe-area-inset-bottom));
+    scroll-padding-bottom: 16px;
   }
 
   .neon-text-cyan,
