@@ -360,3 +360,21 @@ export function flyTo(map, { lng, lat, zoom = 18, pitch = 62 }) {
   map.setZoomAndCenter(zoom, [lng, lat], false, 800)
   map.setPitch(pitch, false, 600)
 }
+
+/** 实况天气 → 地图视角微调（pitch，避免大改 mapStyle 与双世界冲突） */
+export const WEATHER_MAP_TWEAK = {
+  clear: { pitchDelta: 2 },
+  cloudy: { pitchDelta: 0 },
+  overcast: { pitchDelta: -2 },
+  rain: { pitchDelta: -5 },
+  snow: { pitchDelta: -3 },
+  fog: { pitchDelta: -7 },
+}
+
+export function applyWeatherToMap(map, theme = 'clear', { isMobile = false } = {}) {
+  if (!map) return
+  const tweak = WEATHER_MAP_TWEAK[theme] ?? WEATHER_MAP_TWEAK.clear
+  const basePitch = isMobile ? 42 : 55
+  const pitch = Math.max(28, Math.min(62, basePitch + tweak.pitchDelta))
+  map.setPitch(pitch, false, 450)
+}

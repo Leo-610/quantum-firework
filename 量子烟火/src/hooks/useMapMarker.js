@@ -8,10 +8,13 @@ import {
   flyTo,
   enableCoordPicker,
   setWorldStyle,
+  applyWeatherToMap,
   WORLD_STYLES,
 } from '../api/amap'
 import { useWorldStore } from '../store/worldStore'
 import { useEmotionStore } from '../store/emotionStore'
+import { useWeatherStore } from '../store/weatherStore'
+import { useIsMobile } from './useMediaQuery'
 
 /** 地图初始化与地标管理 Hook */
 export function useMap(containerId) {
@@ -26,6 +29,8 @@ export function useMap(containerId) {
   const setSelectedLandmark = useWorldStore(s => s.setSelectedLandmark)
   const world = useWorldStore(s => s.world)
   const heatmapData = useEmotionStore(s => s.heatmapData)
+  const weatherTheme = useWeatherStore(s => s.theme)
+  const isMobile = useIsMobile()
 
   useEffect(() => {
     if (mapRef.current) return
@@ -82,6 +87,12 @@ export function useMap(containerId) {
     if (!mapRef.current || !buildingsRef.current) return
     buildingsRef.current = setWorldStyle(mapRef.current, buildingsRef.current, world)
   }, [world])
+
+  // 实况天气 → 地图 pitch 微调
+  useEffect(() => {
+    if (!mapRef.current) return
+    applyWeatherToMap(mapRef.current, weatherTheme, { isMobile })
+  }, [weatherTheme, isMobile])
 
   // 热力图数据更新
   useEffect(() => {

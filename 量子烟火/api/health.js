@@ -12,6 +12,6 @@ export default async function handler(req, res) {
     status: 'ok',
     service: '量子烟火-API代理',
     platform: 'vercel',
-    endpoints: ['router', 'inner/stream', 'outer', 'emotion', 'food'],
+    endpoints: ['router', 'inner/stream', 'outer', 'emotion', 'food', 'weather'],
   })
 }

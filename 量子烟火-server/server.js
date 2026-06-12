@@ -11,8 +11,7 @@ import { fileURLToPath } from 'url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
-function loadEnvFile() {
-  const envPath = join(__dirname, '.env')
+function loadEnvFile(envPath) {
   if (!existsSync(envPath)) return
   for (const line of readFileSync(envPath, 'utf8').split('\n')) {
     const trimmed = line.trim()
@@ -25,7 +24,8 @@ function loadEnvFile() {
   }
 }
 
-loadEnvFile()
+loadEnvFile(join(__dirname, '.env'))
+loadEnvFile(join(__dirname, '../量子烟火/.env'))
 
 const app = express()
 const PORT = process.env.PORT || 3001
@@ -239,6 +239,18 @@ app.post('/api/food', (req, res) => {
   )
 })
 
+// ── 海淀实况天气（高德 Web 服务代理）──
+app.get('/api/weather', async (req, res) => {
+  try {
+    const { BJTU_ADCODE, fetchAmapLiveWeather, getAmapWebKey } = await import('../量子烟火/api/_lib/weather.js')
+    const adcode = req.query.adcode || BJTU_ADCODE
+    const live = await fetchAmapLiveWeather(adcode, getAmapWebKey())
+    res.json({ ok: true, live })
+  } catch (e) {
+    res.status(e.status || 500).json({ ok: false, error: e.message || '天气获取失败' })
+  }
+})
+
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 量子烟火 API 代理已启动  http://localhost:${PORT}`)
   console.log('')
@@ -249,6 +261,7 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log('  POST /api/outer')
   console.log('  POST /api/emotion')
   console.log('  POST /api/food')
+  console.log('  GET  /api/weather')
   console.log('')
   const missing = Object.entries(CONFIG)
     .filter(([, v]) => !v.token)

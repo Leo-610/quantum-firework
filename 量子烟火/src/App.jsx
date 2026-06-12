@@ -15,6 +15,8 @@ import { useIsMobile } from './hooks/useMediaQuery'
 
 import { useAppBoot } from './hooks/useAppBoot'
 import SplashScreen from './components/SplashScreen'
+import WeatherHud, { WeatherAtmosphere } from './components/Weather/WeatherHud'
+import { useWeatherStore } from './store/weatherStore'
 
 export default function App() {
   const { world, isPanelOpen, setPanelOpen, userId, setUserId, mapInstance, selectedLandmark } = useWorldStore()
@@ -22,6 +24,8 @@ export default function App() {
   const isMobile = useIsMobile()
   const { complete: bootComplete, progress, phase } = useAppBoot()
   const isInner = world === 'inner'
+  const weatherTheme = useWeatherStore(s => s.theme)
+  const loadWeather = useWeatherStore(s => s.loadWeather)
 
   useEffect(() => {
     if (!userId) {
@@ -29,6 +33,11 @@ export default function App() {
     }
     loadPlantsToHeatmap()
   }, [])
+
+  useEffect(() => {
+    if (!bootComplete) return
+    loadWeather()
+  }, [bootComplete, loadWeather])
 
   useEffect(() => {
     const onKeyDown = (e) => {
@@ -68,6 +77,7 @@ export default function App() {
     <>
     <div
       className={`relative w-full h-screen overflow-hidden world-shell world-transition ${isInner ? 'world-inner' : 'world-outer'} ${bootComplete ? '' : 'pointer-events-none'}`}
+      data-weather={weatherTheme}
       aria-hidden={!bootComplete}
     >
       <MapCanvas />
@@ -79,15 +89,19 @@ export default function App() {
       </div>
 
       <div className="world-atmosphere" aria-hidden="true" />
+      <WeatherAtmosphere theme={weatherTheme} />
 
       {/* 移动端：顶部精简栏 */}
       {isMobile ? (
         <div className="mobile-top-bar absolute top-0 left-0 right-0 z-50 flex items-center justify-between px-3 pt-safe">
-          <div className="hud-glass flex items-center gap-2 px-2.5 py-1.5 rounded-xl">
+          <div className="hud-glass flex items-center gap-2 px-2.5 py-1.5 rounded-xl min-w-0">
             <AppIconMark size={28} />
-            <span className="text-xs font-bold font-display text-theme-primary">
-              量子烟火
-            </span>
+            <div className="min-w-0">
+              <span className="text-xs font-bold font-display text-theme-primary block">
+                量子烟火
+              </span>
+              <WeatherHud compact />
+            </div>
           </div>
           <button
             onClick={() => setPanelOpen(!isPanelOpen)}
@@ -107,14 +121,17 @@ export default function App() {
         <>
           <WorldSwitch />
           <div className="absolute top-4 left-4 z-50 desktop-only">
-            <div className="hud-glass flex items-center gap-2.5 px-3 py-2 rounded-xl">
-              <AppIconMark size={36} />
-              <div>
-                <p className="text-sm font-bold font-display" style={{ color: isInner ? '#0ff0fc' : '#ff6b35' }}>
-                  量子烟火
-                </p>
-                <p className="text-[10px] font-mono opacity-40">北京交通大学</p>
+            <div className="hud-glass flex flex-col gap-2 px-3 py-2 rounded-xl">
+              <div className="flex items-center gap-2.5">
+                <AppIconMark size={36} />
+                <div>
+                  <p className="text-sm font-bold font-display" style={{ color: isInner ? '#0ff0fc' : '#ff6b35' }}>
+                    量子烟火
+                  </p>
+                  <p className="text-[10px] font-mono opacity-40">北京交通大学</p>
+                </div>
               </div>
+              <WeatherHud />
             </div>
           </div>
           <div className="absolute top-4 right-4 z-50 desktop-only">
