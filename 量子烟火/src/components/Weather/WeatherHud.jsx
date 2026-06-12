@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react'
 import { Cloud, CloudFog, CloudRain, CloudSnow, Sun } from 'lucide-react'
 import { useWeatherStore } from '../../store/weatherStore'
+import { usesLightHaze } from '../../constants/weatherThemes'
 
 function pickIcon(theme, weatherText = '') {
   if (theme === 'clear') return Sun
@@ -58,24 +59,24 @@ export default function WeatherHud({ compact = false }) {
 /** 全屏天气粒子 / 氛围层 */
 export function WeatherAtmosphere({ theme = 'clear' }) {
   const snowflakes = useMemo(
-    () => Array.from({ length: 42 }, (_, i) => ({
+    () => Array.from({ length: 24 }, (_, i) => ({
       id: i,
       left: `${(i * 17 + (i % 5) * 11) % 100}%`,
       delay: `${(i % 7) * 0.35}s`,
       duration: `${4.5 + (i % 6) * 0.7}s`,
-      size: 2 + (i % 4),
-      opacity: 0.35 + (i % 5) * 0.12,
+      size: 2 + (i % 3),
+      opacity: 0.2 + (i % 4) * 0.08,
     })),
     [],
   )
 
   const rainLines = useMemo(
-    () => Array.from({ length: 48 }, (_, i) => ({
+    () => Array.from({ length: 22 }, (_, i) => ({
       id: i,
       left: `${(i * 13) % 100}%`,
       delay: `${(i % 9) * 0.08}s`,
       duration: `${0.55 + (i % 5) * 0.12}s`,
-      height: 14 + (i % 4) * 6,
+      height: 10 + (i % 3) * 5,
     })),
     [],
   )
@@ -120,8 +121,12 @@ export function WeatherAtmosphere({ theme = 'clear' }) {
         </div>
       )}
 
-      {(theme === 'fog' || theme === 'overcast' || theme === 'cloudy') && (
-        <div className={`weather-fx__mist weather-fx__mist--${theme}`} />
+      {usesLightHaze(theme) && (
+        <div className={`weather-fx__haze weather-fx__haze--${theme}`} />
+      )}
+
+      {theme === 'fog' && (
+        <div className="weather-fx__mist weather-fx__mist--fog" />
       )}
     </div>
   )

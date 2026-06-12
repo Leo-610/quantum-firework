@@ -363,12 +363,12 @@ export function flyTo(map, { lng, lat, zoom = 18, pitch = 62 }) {
 
 /** 实况天气 → 地图视角微调（pitch，避免大改 mapStyle 与双世界冲突） */
 export const WEATHER_MAP_TWEAK = {
-  clear: { pitchDelta: 2 },
+  clear: { pitchDelta: 1 },
   cloudy: { pitchDelta: 0 },
-  overcast: { pitchDelta: -2 },
-  rain: { pitchDelta: -5 },
-  snow: { pitchDelta: -3 },
-  fog: { pitchDelta: -7 },
+  overcast: { pitchDelta: 0 },
+  rain: { pitchDelta: -2 },
+  snow: { pitchDelta: -1 },
+  fog: { pitchDelta: -3 },
 }
 
 export function applyWeatherToMap(map, theme = 'clear', { isMobile = false } = {}) {
