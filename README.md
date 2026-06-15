@@ -1,6 +1,21 @@
 # 量子烟火 (Quantum Fireworks)
 
-北交大校园情绪可视化 Web 应用 — React + Vite 前端，Coze Bot / 工作流驱动。
+北交大双模态校园情感智能体 — **里世界**情绪倾诉 × **表世界**食堂烟火，Coze 多 Agent + 高德 3D 地图。
+
+| | |
+|---|---|
+| **在线体验** | https://bjtu.app |
+| **GitHub** | https://github.com/Leo-610/quantum-firework |
+| **竞赛** | 首届「火山杯」AI 应用创新大赛 · 北京交通大学 |
+
+## 火山杯提交材料
+
+| 材料 | 路径 | 说明 |
+|------|------|------|
+| 作品介绍文档 | [`量子烟火/竞赛提交文档.md`](./量子烟火/竞赛提交文档.md) | 简介 / 设计 / 技术 / 功能 / 价值（≤5MB） |
+| 录屏脚本 | [`量子烟火/docs/竞赛录屏脚本.md`](./量子烟火/docs/竞赛录屏脚本.md) | 3–5 分钟分镜（≤50MB） |
+| PPT 大纲 | [`量子烟火/docs/竞赛PPT大纲.md`](./量子烟火/docs/竞赛PPT大纲.md) | 16–18 页结构（≤20MB） |
+| Coze 复现 | [`量子烟火/Coze配置手册.md`](./量子烟火/Coze配置手册.md) | Bot / 工作流配置 |
 
 ## 目录结构
 
@@ -27,22 +42,18 @@ cd ../量子烟火 && bash scripts/coze-preview-run.sh
 
 | 分支 | 部署目标 | 域名 |
 |------|----------|------|
-| `main` | Production | https://quantum-fireworks-ebon.vercel.app |
+| `main` | Production | https://bjtu.app · https://quantum-fireworks-ebon.vercel.app |
 | `develop` | Preview | 每次 Push 自动生成 Preview URL |
 
-- **GitHub**：https://github.com/Leo-610/quantum-firework
-- **Vercel 项目**：`leo-610s-projects/quantum-fireworks`（Root Directory = `量子烟火`，已关联 GitHub）
-- Push 到 `main` 后自动触发生产部署；环境变量已在 Vercel Production 配置
+- **Vercel 项目**：`leo-610s-projects/quantum-fireworks`（Root Directory = `量子烟火`）
+- Push 到 `main` 后自动触发生产部署
 
 ### 首次推送到 GitHub
 
 ```bash
 cd projects
-# 需先登录 GitHub（浏览器或 Personal Access Token）
 bash scripts/push-to-github.sh
 ```
-
-推送脚本会在提交前检查 `.env` 是否误入 Git，**API 密钥不会上传**。
 
 环境变量见 `量子烟火/.env.vercel.example`，仅存放在 Vercel Dashboard 与本地 `.env`。
 
@@ -53,7 +64,16 @@ bash scripts/push-to-github.sh
 | `main` | 生产环境，合并后自动部署 Production |
 | `develop` | 开发/预览，Push 后生成 Preview 部署 |
 
+## 文档索引
+
+| 文档 | 说明 |
+|------|------|
+| [竞赛提交文档](./量子烟火/竞赛提交文档.md) | 作品介绍（火山杯主文档） |
+| [后续计划与商业化](./量子烟火/后续计划与商业化.md) | 路线图与商业化 |
+| [VERCEL.md](./量子烟火/VERCEL.md) | 生产部署 |
+| [AGENTS.md](./量子烟火/AGENTS.md) | 开发指南 |
+
 ## 安全说明
 
 - `.env` 已在 `.gitignore` 中排除，密钥仅存放在本地与 Vercel Dashboard
-- Coze Token、高德 Key 请通过 Vercel Environment Variables 或 `scripts/vercel-sync-env.sh` 配置
+- Coze Token、高德 Key 请通过 Vercel Environment Variables 配置
