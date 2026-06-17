@@ -2,6 +2,7 @@ import React, { useMemo } from 'react'
 import { Cloud, CloudFog, CloudRain, CloudSnow, Sun } from 'lucide-react'
 import { useWeatherStore } from '../../store/weatherStore'
 import { usesLightHaze } from '../../constants/weatherThemes'
+import { isForcedWeatherLive } from '../../utils/weatherOverride'
 
 function pickIcon(theme, weatherText = '') {
   if (theme === 'clear') return Sun
@@ -31,11 +32,12 @@ export default function WeatherHud({ compact = false }) {
   if (!live) return null
 
   const Icon = pickIcon(theme, live.weather)
+  const isDemo = isForcedWeatherLive(live)
 
   return (
     <div
       className={`weather-hud weather-hud--${theme} ${compact ? 'weather-hud--compact' : ''}`}
-      title={`${live.city} · ${live.weather} · 更新 ${live.reportTime || ''}`}
+      title={`${live.city} · ${live.weather}${isDemo ? ' · 演示模式' : ''} · 更新 ${live.reportTime || ''}`}
     >
       <Icon size={compact ? 13 : 14} className="weather-hud__icon" aria-hidden="true" />
       <span className="weather-hud__text">

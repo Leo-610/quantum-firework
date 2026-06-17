@@ -1,6 +1,10 @@
 import { create } from 'zustand'
 import { fetchCampusWeather, fetchCampusWeatherViaPlugin } from '../api/weather'
 import { isWeatherTheme } from '../constants/weatherThemes'
+import {
+  buildMockWeatherLive,
+  getWeatherOverrideFromUrl,
+} from '../utils/weatherOverride'
 
 const CACHE_KEY = 'qf_weather_v1'
 
@@ -36,6 +40,13 @@ export const useWeatherStore = create((set) => ({
   status: 'idle',
 
   loadWeather: async () => {
+    const override = getWeatherOverrideFromUrl()
+    if (override) {
+      const live = buildMockWeatherLive(override)
+      set({ theme: override, live, status: 'ready' })
+      return live
+    }
+
     const cached = readCache()
     if (cached) {
       set({ theme: cached.theme, live: cached.live, status: 'ready' })
