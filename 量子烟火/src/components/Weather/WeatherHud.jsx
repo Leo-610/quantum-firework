@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 import { Cloud, CloudFog, CloudRain, CloudSnow, Sun } from 'lucide-react'
 import { useWeatherStore } from '../../store/weatherStore'
 import { usesLightHaze } from '../../constants/weatherThemes'
-import { isForcedWeatherLive } from '../../utils/weatherOverride'
+import { getWeatherOverrideFromUrl, isForcedWeatherLive } from '../../utils/weatherOverride'
 
 function pickIcon(theme, weatherText = '') {
   if (theme === 'clear') return Sun
@@ -60,8 +60,10 @@ export default function WeatherHud({ compact = false }) {
 
 /** 全屏天气粒子 / 氛围层 */
 export function WeatherAtmosphere({ theme = 'clear' }) {
+  const recordBoost = getWeatherOverrideFromUrl() === theme
+
   const snowflakes = useMemo(
-    () => Array.from({ length: 24 }, (_, i) => ({
+    () => Array.from({ length: recordBoost ? 36 : 24 }, (_, i) => ({
       id: i,
       left: `${(i * 17 + (i % 5) * 11) % 100}%`,
       delay: `${(i % 7) * 0.35}s`,
@@ -69,18 +71,18 @@ export function WeatherAtmosphere({ theme = 'clear' }) {
       size: 2 + (i % 3),
       opacity: 0.2 + (i % 4) * 0.08,
     })),
-    [],
+    [recordBoost],
   )
 
   const rainLines = useMemo(
-    () => Array.from({ length: 22 }, (_, i) => ({
+    () => Array.from({ length: recordBoost ? 56 : 36 }, (_, i) => ({
       id: i,
-      left: `${(i * 13) % 100}%`,
-      delay: `${(i % 9) * 0.08}s`,
-      duration: `${0.55 + (i % 5) * 0.12}s`,
-      height: 10 + (i % 3) * 5,
+      left: `${(i * 7.3 + (i % 11) * 3.1) % 100}%`,
+      delay: `${(i % 9) * 0.06}s`,
+      duration: `${0.45 + (i % 5) * 0.1}s`,
+      height: 14 + (i % 4) * 8,
     })),
-    [],
+    [recordBoost],
   )
 
   if (theme === 'clear') return null

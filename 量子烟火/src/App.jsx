@@ -17,6 +17,7 @@ import { useAppBoot } from './hooks/useAppBoot'
 import SplashScreen from './components/SplashScreen'
 import WeatherHud, { WeatherAtmosphere } from './components/Weather/WeatherHud'
 import { useWeatherStore } from './store/weatherStore'
+import { getWeatherOverrideFromUrl, isForcedWeatherLive } from './utils/weatherOverride'
 
 export default function App() {
   const { world, isPanelOpen, setPanelOpen, userId, setUserId, mapInstance, selectedLandmark } = useWorldStore()
@@ -25,7 +26,9 @@ export default function App() {
   const { complete: bootComplete, progress, phase } = useAppBoot()
   const isInner = world === 'inner'
   const weatherTheme = useWeatherStore(s => s.theme)
+  const weatherLive = useWeatherStore(s => s.live)
   const loadWeather = useWeatherStore(s => s.loadWeather)
+  const weatherForced = Boolean(getWeatherOverrideFromUrl()) || isForcedWeatherLive(weatherLive)
 
   useEffect(() => {
     if (!userId) {
@@ -78,6 +81,7 @@ export default function App() {
     <div
       className={`relative w-full h-screen overflow-hidden world-shell world-transition ${isInner ? 'world-inner' : 'world-outer'} ${bootComplete ? '' : 'pointer-events-none'}`}
       data-weather={weatherTheme}
+      data-weather-forced={weatherForced ? 'true' : 'false'}
       aria-hidden={!bootComplete}
     >
       <MapCanvas />
