@@ -3,6 +3,7 @@ import { ChevronDown, Cloud, CloudFog, CloudRain, CloudSnow, Sun } from 'lucide-
 import { useWeatherStore } from '../../store/weatherStore'
 import { usesLightHaze } from '../../constants/weatherThemes'
 import WeatherPicker from './WeatherPicker'
+import SnowflakeIcon from './SnowflakeIcon'
 
 function pickIcon(theme, weatherText = '') {
   if (theme === 'clear') return Sun
@@ -81,17 +82,17 @@ export function WeatherAtmosphere({ theme = 'clear', effectsEnabled = true, fxBo
   const boost = fxBoost
 
   const snowflakes = useMemo(
-    () => Array.from({ length: boost ? 90 : 72 }, (_, i) => {
-      const tier = i % 5
-      const isLarge = tier === 0 || tier === 1
+    () => Array.from({ length: boost ? 58 : 48 }, (_, i) => {
+      const isLarge = i % 4 === 0
       return {
         id: i,
         left: `${(i * 11.7 + (i % 7) * 9.3) % 100}%`,
         delay: `${(i % 11) * 0.22}s`,
-        duration: `${3.2 + (i % 8) * 0.55}s`,
-        size: isLarge ? 10 + (i % 4) * 4 : 5 + (i % 3) * 2,
-        opacity: isLarge ? 0.65 + (i % 3) * 0.12 : 0.45 + (i % 4) * 0.1,
-        drift: 8 + (i % 6) * 6,
+        duration: `${3.4 + (i % 8) * 0.6}s`,
+        size: isLarge ? 22 + (i % 3) * 4 : 14 + (i % 4) * 2,
+        opacity: isLarge ? 0.75 + (i % 3) * 0.08 : 0.55 + (i % 4) * 0.1,
+        drift: 10 + (i % 6) * 5,
+        spin: (i % 2 === 0 ? 1 : -1) * (180 + (i % 5) * 36),
         large: isLarge,
       }
     }),
@@ -152,14 +153,15 @@ export function WeatherAtmosphere({ theme = 'clear', effectsEnabled = true, fxBo
               className={`weather-fx__snowflake ${flake.large ? 'weather-fx__snowflake--large' : ''}`}
               style={{
                 left: flake.left,
-                width: flake.size,
-                height: flake.size,
                 opacity: flake.opacity,
                 animationDelay: flake.delay,
                 animationDuration: flake.duration,
                 '--snow-drift': `${flake.drift}px`,
+                '--snow-spin': `${flake.spin}deg`,
               }}
-            />
+            >
+              <SnowflakeIcon size={flake.size} />
+            </span>
           ))}
         </div>
       )}

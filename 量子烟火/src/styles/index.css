@@ -361,17 +361,23 @@ html, body {
 
 .weather-fx__snowflake {
   position: absolute;
-  top: -16px;
-  border-radius: 999px;
-  background: radial-gradient(circle at 35% 35%, #fff 0%, rgba(255, 255, 255, 0.85) 45%, rgba(230, 240, 255, 0.5) 100%);
-  box-shadow: 0 0 8px rgba(255, 255, 255, 0.55), 0 0 2px rgba(255, 255, 255, 0.9);
+  top: -28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(240, 248, 255, 0.95);
+  filter: drop-shadow(0 0 5px rgba(200, 230, 255, 0.55));
   animation: weather-snow-fall linear infinite;
+  pointer-events: none;
+}
+
+.weather-fx__snowflake svg {
+  display: block;
 }
 
 .weather-fx__snowflake--large {
-  border-radius: 40% 60% 50% 50%;
-  box-shadow: 0 0 14px rgba(255, 255, 255, 0.65), 0 0 4px rgba(255, 255, 255, 0.95);
-  filter: blur(0.3px);
+  color: #fff;
+  filter: drop-shadow(0 0 8px rgba(220, 240, 255, 0.75));
 }
 
 .weather-fx--snow::after {
@@ -385,9 +391,9 @@ html, body {
 }
 
 @keyframes weather-snow-fall {
-  0% { transform: translateY(-16px) translateX(0) rotate(0deg); opacity: 0; }
-  8% { opacity: 0.9; }
-  100% { transform: translateY(105vh) translateX(var(--snow-drift, 14px)) rotate(180deg); opacity: 0.35; }
+  0% { transform: translateY(-20px) translateX(0) rotate(0deg); opacity: 0; }
+  8% { opacity: 1; }
+  100% { transform: translateY(105vh) translateX(var(--snow-drift, 14px)) rotate(var(--snow-spin, 180deg)); opacity: 0.4; }
 }
 
 /* 浓雾才用 blur；阴/多云不再使用 */
@@ -725,7 +731,7 @@ html, body {
 }
 
 .world-shell[data-weather-forced="true"][data-weather="snow"] .weather-fx__snowflake--large {
-  box-shadow: 0 0 18px rgba(255, 255, 255, 0.75), 0 0 6px rgba(255, 255, 255, 1);
+  filter: drop-shadow(0 0 10px rgba(230, 245, 255, 0.85));
 }
 
 .world-shell[data-weather-forced="true"][data-weather="fog"] {
