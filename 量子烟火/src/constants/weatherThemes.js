@@ -5,7 +5,7 @@ export const WEATHER_THEMES = {
   cloudy: { label: '多云', hudIcon: 'cloud', mapBright: 1, mapSat: 0.98 },
   overcast: { label: '阴', hudIcon: 'cloud', mapBright: 0.98, mapSat: 0.97 },
   rain: { label: '雨', hudIcon: 'rain', mapBright: 0.94, mapSat: 0.98 },
-  snow: { label: '雪', hudIcon: 'snow', mapBright: 0.97, mapSat: 0.98 },
+  snow: { label: '大雪', hudIcon: 'snow', mapBright: 0.94, mapSat: 0.96 },
   fog: { label: '雾', hudIcon: 'fog', mapBright: 0.93, mapSat: 0.95 },
 }
 

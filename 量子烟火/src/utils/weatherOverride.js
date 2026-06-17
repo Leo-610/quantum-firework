@@ -7,7 +7,7 @@ const MOCK_BY_THEME = {
   cloudy: { weather: '多云', temperature: '22', windDirection: '东', windPower: '3', humidity: '55' },
   overcast: { weather: '阴', temperature: '20', windDirection: '东南', windPower: '2', humidity: '70' },
   rain: { weather: '小雨', temperature: '18', windDirection: '东南', windPower: '3', humidity: '85' },
-  snow: { weather: '小雪', temperature: '2', windDirection: '北', windPower: '2', humidity: '60' },
+  snow: { weather: '大雪', temperature: '-2', windDirection: '北', windPower: '3', humidity: '68' },
   fog: { weather: '雾', temperature: '15', windDirection: '无', windPower: '≤3', humidity: '92' },
 }
 
