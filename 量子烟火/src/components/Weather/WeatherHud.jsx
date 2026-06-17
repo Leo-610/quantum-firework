@@ -82,17 +82,17 @@ export function WeatherAtmosphere({ theme = 'clear', effectsEnabled = true, fxBo
   const boost = fxBoost
 
   const snowflakes = useMemo(
-    () => Array.from({ length: boost ? 58 : 48 }, (_, i) => {
-      const isLarge = i % 4 === 0
+    () => Array.from({ length: boost ? 44 : 36 }, (_, i) => {
+      const isLarge = i % 5 === 0
       return {
         id: i,
-        left: `${(i * 11.7 + (i % 7) * 9.3) % 100}%`,
-        delay: `${(i % 11) * 0.22}s`,
-        duration: `${3.4 + (i % 8) * 0.6}s`,
-        size: isLarge ? 22 + (i % 3) * 4 : 14 + (i % 4) * 2,
-        opacity: isLarge ? 0.75 + (i % 3) * 0.08 : 0.55 + (i % 4) * 0.1,
-        drift: 10 + (i % 6) * 5,
-        spin: (i % 2 === 0 ? 1 : -1) * (180 + (i % 5) * 36),
+        left: `${(i * 13.1 + (i % 7) * 8.7) % 100}%`,
+        delay: `${(i % 11) * 0.25}s`,
+        duration: `${3.8 + (i % 8) * 0.55}s`,
+        size: isLarge ? 32 + (i % 3) * 6 : 20 + (i % 4) * 4,
+        opacity: isLarge ? 0.82 + (i % 3) * 0.06 : 0.62 + (i % 4) * 0.08,
+        drift: 8 + (i % 6) * 4,
+        spin: (i % 2 === 0 ? 1 : -1) * (90 + (i % 4) * 45),
         large: isLarge,
       }
     }),
