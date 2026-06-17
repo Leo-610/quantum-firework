@@ -85,6 +85,19 @@ export function WeatherAtmosphere({ theme = 'clear' }) {
     [recordBoost],
   )
 
+  const cloudPuffs = useMemo(
+    () => Array.from({ length: recordBoost ? 9 : 6 }, (_, i) => ({
+      id: i,
+      left: `${(i * 19 + 5) % 92}%`,
+      top: `${(i % 4) * 4 + 2}%`,
+      width: 180 + (i % 5) * 70,
+      height: 56 + (i % 4) * 24,
+      delay: `${(i % 6) * 1.4}s`,
+      duration: `${22 + (i % 4) * 6}s`,
+    })),
+    [recordBoost],
+  )
+
   if (theme === 'clear') return null
 
   return (
@@ -126,7 +139,25 @@ export function WeatherAtmosphere({ theme = 'clear' }) {
       )}
 
       {usesLightHaze(theme) && (
-        <div className={`weather-fx__haze weather-fx__haze--${theme}`} />
+        <>
+          <div className="weather-fx__clouds">
+            {cloudPuffs.map(cloud => (
+              <span
+                key={cloud.id}
+                className="weather-fx__cloud"
+                style={{
+                  left: cloud.left,
+                  top: cloud.top,
+                  width: cloud.width,
+                  height: cloud.height,
+                  animationDelay: cloud.delay,
+                  animationDuration: cloud.duration,
+                }}
+              />
+            ))}
+          </div>
+          <div className={`weather-fx__haze weather-fx__haze--${theme}`} />
+        </>
       )}
 
       {theme === 'fog' && (
