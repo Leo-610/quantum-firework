@@ -5,6 +5,11 @@ import {
   buildMockWeatherLive,
   getWeatherOverrideFromUrl,
 } from '../utils/weatherOverride'
+import {
+  clearManualWeatherPrefs,
+  readWeatherPrefs,
+  writeWeatherPrefs,
+} from '../utils/weatherPreferences'
 
 const CACHE_KEY = 'qf_weather_v1'
 
@@ -27,6 +32,7 @@ function readCache() {
 }
 
 function writeCache(live) {
+  if (live?.forced) return
   localStorage.setItem(CACHE_KEY, JSON.stringify({
     date: todayKey(),
     theme: live.theme,
@@ -34,48 +40,104 @@ function writeCache(live) {
   }))
 }
 
-export const useWeatherStore = create((set) => ({
-  theme: 'clear',
-  live: null,
-  status: 'idle',
+function applyLive(set, live, source) {
+  set({
+    theme: live.theme,
+    live,
+    status: 'ready',
+    source,
+  })
+}
 
-  loadWeather: async () => {
-    const override = getWeatherOverrideFromUrl()
-    if (override) {
-      const live = buildMockWeatherLive(override)
-      set({ theme: override, live, status: 'ready' })
-      return live
-    }
+export const useWeatherStore = create((set, get) => {
+  const initialPrefs = typeof window !== 'undefined' ? readWeatherPrefs() : { effectsEnabled: true, source: 'live', manualTheme: null }
 
-    const cached = readCache()
-    if (cached) {
-      set({ theme: cached.theme, live: cached.live, status: 'ready' })
-      return cached.live
-    }
+  return {
+    theme: 'clear',
+    live: null,
+    status: 'idle',
+    source: 'live',
+    effectsEnabled: initialPrefs.effectsEnabled,
+    pickerOpen: false,
 
-    set({ status: 'loading' })
+    setPickerOpen: (open) => set({ pickerOpen: open }),
 
-    try {
-      let live
-      // 优先 JS 插件（与页面 Web 端 Key 一致）；REST 代理需单独开通 Web 服务 Key
-      if (typeof window !== 'undefined' && window.AMap) {
-        try {
-          live = await fetchCampusWeatherViaPlugin()
-        } catch (pluginErr) {
-          console.warn('高德 Weather 插件失败，尝试 REST 代理', pluginErr.message)
+    setEffectsEnabled: (enabled) => {
+      writeWeatherPrefs({ effectsEnabled: enabled })
+      set({ effectsEnabled: enabled })
+    },
+
+    setManualTheme: (theme) => {
+      if (!isWeatherTheme(theme)) return
+      writeWeatherPrefs({ source: 'manual', manualTheme: theme })
+      const live = buildMockWeatherLive(theme, { manual: true })
+      applyLive(set, live, 'manual')
+      set({ effectsEnabled: true })
+      writeWeatherPrefs({ effectsEnabled: true })
+    },
+
+    resetToLiveWeather: async () => {
+      clearManualWeatherPrefs()
+      set({ source: 'live', status: 'loading' })
+      return get().fetchLiveWeather()
+    },
+
+    fetchLiveWeather: async () => {
+      set({ status: 'loading' })
+
+      try {
+        let live
+        if (typeof window !== 'undefined' && window.AMap) {
+          try {
+            live = await fetchCampusWeatherViaPlugin()
+          } catch (pluginErr) {
+            console.warn('高德 Weather 插件失败，尝试 REST 代理', pluginErr.message)
+            live = await fetchCampusWeather()
+          }
+        } else {
           live = await fetchCampusWeather()
         }
-      } else {
-        live = await fetchCampusWeather()
+
+        writeCache(live)
+        applyLive(set, live, 'live')
+        return live
+      } catch (e) {
+        console.warn('天气加载失败，使用默认晴好氛围', e.message)
+        set({ theme: 'clear', live: null, status: 'error', source: 'live' })
+        return null
+      }
+    },
+
+    loadWeather: async () => {
+      const urlTheme = getWeatherOverrideFromUrl()
+      if (urlTheme) {
+        const live = buildMockWeatherLive(urlTheme, { manual: false })
+        applyLive(set, live, 'url')
+        return live
       }
 
-      writeCache(live)
-      set({ theme: live.theme, live, status: 'ready' })
-      return live
-    } catch (e) {
-      console.warn('天气加载失败，使用默认晴好氛围', e.message)
-      set({ theme: 'clear', live: null, status: 'error' })
-      return null
-    }
-  },
-}))
+      const prefs = readWeatherPrefs()
+      set({ effectsEnabled: prefs.effectsEnabled })
+
+      if (prefs.source === 'manual' && prefs.manualTheme) {
+        const live = buildMockWeatherLive(prefs.manualTheme, { manual: true })
+        applyLive(set, live, 'manual')
+        return live
+      }
+
+      const cached = readCache()
+      if (cached) {
+        applyLive(set, cached.live, 'live')
+        return cached.live
+      }
+
+      return get().fetchLiveWeather()
+    },
+
+    /** 是否加强粒子（手动 / URL 模式） */
+    isFxBoost: () => {
+      const { source } = get()
+      return source === 'manual' || source === 'url'
+    },
+  }
+})

@@ -20,14 +20,14 @@ export function getWeatherOverrideFromUrl() {
   return raw
 }
 
-/** 构造演示用 live 数据（不调用高德） */
-export function buildMockWeatherLive(theme) {
+/** 构造演示 / 手动选择用 live 数据（不调用高德） */
+export function buildMockWeatherLive(theme, { manual = false } = {}) {
   const preset = MOCK_BY_THEME[theme] || MOCK_BY_THEME.clear
   const now = new Date()
   const reportTime = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`
 
   return {
-    city: '海淀区',
+    city: manual ? '海淀区 · 自选' : '海淀区',
     adcode: '110108',
     theme,
     weather: preset.weather,
@@ -37,10 +37,15 @@ export function buildMockWeatherLive(theme) {
     humidity: preset.humidity,
     reportTime,
     forced: true,
+    manual,
     forcedLabel: WEATHER_THEMES[theme]?.label || theme,
   }
 }
 
 export function isForcedWeatherLive(live) {
   return Boolean(live?.forced)
+}
+
+export function isManualWeatherLive(live) {
+  return Boolean(live?.manual)
 }

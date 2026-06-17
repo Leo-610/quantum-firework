@@ -17,7 +17,6 @@ import { useAppBoot } from './hooks/useAppBoot'
 import SplashScreen from './components/SplashScreen'
 import WeatherHud, { WeatherAtmosphere } from './components/Weather/WeatherHud'
 import { useWeatherStore } from './store/weatherStore'
-import { getWeatherOverrideFromUrl, isForcedWeatherLive } from './utils/weatherOverride'
 
 export default function App() {
   const { world, isPanelOpen, setPanelOpen, userId, setUserId, mapInstance, selectedLandmark } = useWorldStore()
@@ -26,9 +25,10 @@ export default function App() {
   const { complete: bootComplete, progress, phase } = useAppBoot()
   const isInner = world === 'inner'
   const weatherTheme = useWeatherStore(s => s.theme)
-  const weatherLive = useWeatherStore(s => s.live)
+  const weatherSource = useWeatherStore(s => s.source)
+  const effectsEnabled = useWeatherStore(s => s.effectsEnabled)
   const loadWeather = useWeatherStore(s => s.loadWeather)
-  const weatherForced = Boolean(getWeatherOverrideFromUrl()) || isForcedWeatherLive(weatherLive)
+  const weatherBoost = weatherSource === 'manual' || weatherSource === 'url'
 
   useEffect(() => {
     if (!userId) {
@@ -81,7 +81,8 @@ export default function App() {
     <div
       className={`relative w-full h-screen overflow-hidden world-shell world-transition ${isInner ? 'world-inner' : 'world-outer'} ${bootComplete ? '' : 'pointer-events-none'}`}
       data-weather={weatherTheme}
-      data-weather-forced={weatherForced ? 'true' : 'false'}
+      data-weather-forced={weatherBoost ? 'true' : 'false'}
+      data-weather-effects={effectsEnabled ? 'true' : 'false'}
       aria-hidden={!bootComplete}
     >
       <MapCanvas />
@@ -93,7 +94,11 @@ export default function App() {
       </div>
 
       <div className="world-atmosphere" aria-hidden="true" />
-      <WeatherAtmosphere theme={weatherTheme} />
+      <WeatherAtmosphere
+        theme={weatherTheme}
+        effectsEnabled={effectsEnabled}
+        fxBoost={weatherBoost}
+      />
 
       {/* 移动端：顶部精简栏 */}
       {isMobile ? (
@@ -104,7 +109,7 @@ export default function App() {
               <span className="text-xs font-bold font-display text-theme-primary block">
                 量子烟火
               </span>
-              <WeatherHud compact />
+              <WeatherHud compact isInner={isInner} />
             </div>
           </div>
           <button
@@ -135,7 +140,7 @@ export default function App() {
                   <p className="text-[10px] font-mono opacity-40">北京交通大学</p>
                 </div>
               </div>
-              <WeatherHud />
+              <WeatherHud isInner={isInner} />
             </div>
           </div>
           <div className="absolute top-4 right-4 z-50 desktop-only">

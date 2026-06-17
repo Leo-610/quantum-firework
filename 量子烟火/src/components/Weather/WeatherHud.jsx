@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react'
-import { Cloud, CloudFog, CloudRain, CloudSnow, Sun } from 'lucide-react'
+import { ChevronDown, Cloud, CloudFog, CloudRain, CloudSnow, Sun } from 'lucide-react'
 import { useWeatherStore } from '../../store/weatherStore'
 import { usesLightHaze } from '../../constants/weatherThemes'
-import { getWeatherOverrideFromUrl, isForcedWeatherLive } from '../../utils/weatherOverride'
+import WeatherPicker from './WeatherPicker'
 
 function pickIcon(theme, weatherText = '') {
   if (theme === 'clear') return Sun
@@ -14,11 +14,15 @@ function pickIcon(theme, weatherText = '') {
   return Cloud
 }
 
-/** 顶部实况天气 HUD */
-export default function WeatherHud({ compact = false }) {
+/** 顶部实况天气 HUD（点击打开设置） */
+export default function WeatherHud({ compact = false, isInner = true }) {
   const live = useWeatherStore(s => s.live)
   const status = useWeatherStore(s => s.status)
   const theme = useWeatherStore(s => s.theme)
+  const source = useWeatherStore(s => s.source)
+  const effectsEnabled = useWeatherStore(s => s.effectsEnabled)
+  const pickerOpen = useWeatherStore(s => s.pickerOpen)
+  const setPickerOpen = useWeatherStore(s => s.setPickerOpen)
 
   if (status === 'loading') {
     return (
@@ -32,61 +36,75 @@ export default function WeatherHud({ compact = false }) {
   if (!live) return null
 
   const Icon = pickIcon(theme, live.weather)
-  const isDemo = isForcedWeatherLive(live)
+  const modeLabel = source === 'live'
+    ? '实况'
+    : source === 'url'
+      ? '演示'
+      : '自选'
 
   return (
-    <div
-      className={`weather-hud weather-hud--${theme} ${compact ? 'weather-hud--compact' : ''}`}
-      title={`${live.city} · ${live.weather}${isDemo ? ' · 演示模式' : ''} · 更新 ${live.reportTime || ''}`}
-    >
-      <Icon size={compact ? 13 : 14} className="weather-hud__icon" aria-hidden="true" />
-      <span className="weather-hud__text">
-        {compact ? (
-          <>
-            {live.weather} {live.temperature}°
-          </>
-        ) : (
-          <>
-            {live.city} · {live.weather} {live.temperature}°C
-            {live.windDirection && (
-              <span className="weather-hud__sub"> · {live.windDirection}风 {live.windPower}级</span>
-            )}
-          </>
-        )}
-      </span>
+    <div className={`weather-hud-wrap ${compact ? 'weather-hud-wrap--compact' : ''}`}>
+      <button
+        type="button"
+        className={`weather-hud weather-hud--btn weather-hud--${theme} ${compact ? 'weather-hud--compact' : ''} ${pickerOpen ? 'is-open' : ''}`}
+        title={`${live.city} · ${live.weather} · ${modeLabel}${effectsEnabled ? '' : ' · 特效关'} · 点击设置`}
+        onClick={() => setPickerOpen(!pickerOpen)}
+        aria-expanded={pickerOpen}
+        aria-haspopup="dialog"
+      >
+        <Icon size={compact ? 13 : 14} className="weather-hud__icon" aria-hidden="true" />
+        <span className="weather-hud__text">
+          {compact ? (
+            <>
+              {live.weather} {live.temperature}°
+            </>
+          ) : (
+            <>
+              {live.city} · {live.weather} {live.temperature}°C
+              {live.windDirection && (
+                <span className="weather-hud__sub"> · {live.windDirection}风 {live.windPower}级</span>
+              )}
+            </>
+          )}
+        </span>
+        <span className="weather-hud__mode">{modeLabel}</span>
+        {!effectsEnabled && <span className="weather-hud__off">FX关</span>}
+        <ChevronDown size={12} className="weather-hud__chev" aria-hidden="true" />
+      </button>
+      <WeatherPicker compact={compact} isInner={isInner} />
     </div>
   )
 }
 
 /** 全屏天气粒子 / 氛围层 */
-export function WeatherAtmosphere({ theme = 'clear' }) {
-  const recordBoost = getWeatherOverrideFromUrl() === theme
+export function WeatherAtmosphere({ theme = 'clear', effectsEnabled = true, fxBoost = false }) {
+  const boost = fxBoost
 
   const snowflakes = useMemo(
-    () => Array.from({ length: recordBoost ? 36 : 24 }, (_, i) => ({
+    () => Array.from({ length: boost ? 48 : 32 }, (_, i) => ({
       id: i,
       left: `${(i * 17 + (i % 5) * 11) % 100}%`,
       delay: `${(i % 7) * 0.35}s`,
-      duration: `${4.5 + (i % 6) * 0.7}s`,
-      size: 2 + (i % 3),
-      opacity: 0.2 + (i % 4) * 0.08,
+      duration: `${4 + (i % 6) * 0.65}s`,
+      size: 2 + (i % 4),
+      opacity: boost ? 0.35 + (i % 4) * 0.12 : 0.25 + (i % 4) * 0.1,
     })),
-    [recordBoost],
+    [boost],
   )
 
   const rainLines = useMemo(
-    () => Array.from({ length: recordBoost ? 56 : 36 }, (_, i) => ({
+    () => Array.from({ length: boost ? 56 : 40 }, (_, i) => ({
       id: i,
       left: `${(i * 7.3 + (i % 11) * 3.1) % 100}%`,
       delay: `${(i % 9) * 0.06}s`,
       duration: `${0.45 + (i % 5) * 0.1}s`,
       height: 14 + (i % 4) * 8,
     })),
-    [recordBoost],
+    [boost],
   )
 
   const cloudPuffs = useMemo(
-    () => Array.from({ length: recordBoost ? 9 : 6 }, (_, i) => ({
+    () => Array.from({ length: boost ? 10 : 7 }, (_, i) => ({
       id: i,
       left: `${(i * 19 + 5) % 92}%`,
       top: `${(i % 4) * 4 + 2}%`,
@@ -95,13 +113,14 @@ export function WeatherAtmosphere({ theme = 'clear' }) {
       delay: `${(i % 6) * 1.4}s`,
       duration: `${22 + (i % 4) * 6}s`,
     })),
-    [recordBoost],
+    [boost],
   )
 
+  if (!effectsEnabled) return null
   if (theme === 'clear') return null
 
   return (
-    <div className={`weather-fx weather-fx--${theme}`} aria-hidden="true">
+    <div className={`weather-fx weather-fx--${theme} ${boost ? 'weather-fx--boost' : ''}`} aria-hidden="true">
       {theme === 'rain' && (
         <div className="weather-fx__rain">
           {rainLines.map(line => (
@@ -161,7 +180,21 @@ export function WeatherAtmosphere({ theme = 'clear' }) {
       )}
 
       {theme === 'fog' && (
-        <div className="weather-fx__mist weather-fx__mist--fog" />
+        <>
+          <div className="weather-fx__mist weather-fx__mist--fog" />
+          <div className="weather-fx__fog-wisps">
+            {Array.from({ length: boost ? 5 : 3 }, (_, i) => (
+              <span
+                key={i}
+                className="weather-fx__fog-wisp"
+                style={{
+                  left: `${15 + i * 18}%`,
+                  animationDelay: `${i * 2.2}s`,
+                }}
+              />
+            ))}
+          </div>
+        </>
       )}
     </div>
   )
