@@ -705,6 +705,111 @@ html, body {
   text-align: center;
 }
 
+/* 移动端：底部抽屉 + 遮罩（Portal 到 body，避免顶栏裁剪） */
+.weather-picker-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  border: none;
+  padding: 0;
+  margin: 0;
+  background: rgba(0, 0, 0, 0.52);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  cursor: pointer;
+}
+
+.weather-picker--mobile {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: auto;
+  z-index: 56;
+  width: auto;
+  max-height: min(88vh, 560px);
+  padding: 8px 16px max(calc(env(safe-area-inset-bottom) + 16px), 20px);
+  border-radius: 20px 20px 0 0;
+  border-bottom: none;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  box-shadow: 0 -16px 48px rgba(0, 0, 0, 0.55);
+}
+
+.weather-picker__handle {
+  width: 36px;
+  height: 4px;
+  margin: 4px auto 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.22);
+  flex-shrink: 0;
+}
+
+@media (max-width: 640px) {
+  .weather-picker__title {
+    font-size: 13px;
+  }
+
+  .weather-picker__toggle {
+    font-size: 12px;
+    margin-bottom: 10px;
+  }
+
+  .weather-picker__hint {
+    font-size: 11px;
+    margin-bottom: 12px;
+  }
+
+  .weather-picker__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .weather-picker__chip {
+    min-height: 52px;
+    padding: 10px 6px;
+    font-size: 11px;
+    gap: 6px;
+    touch-action: manipulation;
+  }
+
+  .weather-picker__chip svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .weather-picker__live {
+    min-height: 44px;
+    padding: 10px 12px;
+    font-size: 12px;
+    touch-action: manipulation;
+  }
+
+  .weather-picker__close {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .weather-picker__switch {
+    width: 44px;
+    height: 26px;
+  }
+
+  .weather-picker__switch-knob {
+    width: 20px;
+    height: 20px;
+  }
+
+  .weather-picker__switch.is-on .weather-picker__switch-knob {
+    transform: translateX(18px);
+  }
+}
+
 /* 雾天飘带 */
 .weather-fx__fog-wisps {
   position: absolute;
