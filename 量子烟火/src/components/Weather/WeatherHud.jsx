@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { ChevronDown, Cloud, CloudFog, CloudRain, CloudSnow, Sun } from 'lucide-react'
 import { useWeatherStore } from '../../store/weatherStore'
 import { WEATHER_THEMES } from '../../constants/weatherThemes'
@@ -17,7 +17,7 @@ function pickIcon(theme, weatherText = '') {
 }
 
 /** 顶部实况天气 HUD（点击打开设置） */
-export default function WeatherHud({ compact = false, mobileBar = false, isInner = true }) {
+export default function WeatherHud({ compact = false, mobileBar = false, mobileChip = false, isInner = true }) {
   const live = useWeatherStore(s => s.live)
   const status = useWeatherStore(s => s.status)
   const theme = useWeatherStore(s => s.theme)
@@ -27,29 +27,41 @@ export default function WeatherHud({ compact = false, mobileBar = false, isInner
   const setPickerOpen = useWeatherStore(s => s.setPickerOpen)
   const loadWeather = useWeatherStore(s => s.loadWeather)
 
-  if (status === 'loading') {
+  useEffect(() => {
+    if (status === 'idle' || status === 'error') {
+      loadWeather()
+    }
+  }, [status, loadWeather])
+
+  const mobileMode = mobileBar || mobileChip
+
+  if (status === 'loading' && !live) {
     return (
-      <div className={`weather-hud weather-hud--loading ${compact ? 'weather-hud--compact' : ''} ${mobileBar ? 'weather-hud--mobile-bar' : ''}`} aria-live="polite">
+      <div
+        className={`weather-hud weather-hud--loading ${compact ? 'weather-hud--compact' : ''} ${mobileBar ? 'weather-hud--mobile-bar' : ''} ${mobileChip ? 'weather-hud--mobile-chip is-loading' : ''}`}
+        aria-live="polite"
+      >
         <span className="weather-hud__shimmer" />
-        <span className="weather-hud__text">同步海淀天气…</span>
+        <span className="weather-hud__text">{mobileChip ? '天气' : '同步海淀天气…'}</span>
       </div>
     )
   }
 
   if (!live) {
     return (
-      <div className={`weather-hud-wrap ${mobileBar ? 'weather-hud-wrap--mobile-bar' : ''}`}>
+      <div className={`weather-hud-wrap ${mobileMode ? 'weather-hud-wrap--mobile' : ''} ${mobileChip ? 'weather-hud-wrap--mobile-chip' : ''}`}>
         <button
           type="button"
-          className={`weather-hud weather-hud--btn weather-hud--error ${mobileBar ? 'weather-hud--mobile-bar' : ''}`}
+          className={`weather-hud weather-hud--btn weather-hud--error ${mobileBar ? 'weather-hud--mobile-bar' : ''} ${mobileChip ? 'weather-hud--mobile-chip' : ''}`}
           onClick={() => loadWeather()}
           aria-haspopup="dialog"
+          aria-label="加载海淀天气"
         >
-          <Cloud size={14} className="weather-hud__icon" aria-hidden="true" />
-          <span className="weather-hud__text">点击加载海淀天气</span>
+          <Cloud size={mobileChip ? 16 : 14} className="weather-hud__icon" aria-hidden="true" />
+          <span className="weather-hud__text">{mobileChip ? '天气' : '点击加载海淀天气'}</span>
           <ChevronDown size={12} className="weather-hud__chev" aria-hidden="true" />
         </button>
-        <WeatherPicker compact={compact || mobileBar} isInner={isInner} />
+        <WeatherPicker compact={compact || mobileMode} isInner={isInner} />
       </div>
     )
   }
@@ -63,18 +75,24 @@ export default function WeatherHud({ compact = false, mobileBar = false, isInner
   const themeLabel = WEATHER_THEMES[theme]?.label || live.weather
 
   return (
-    <div className={`weather-hud-wrap ${compact ? 'weather-hud-wrap--compact' : ''} ${mobileBar ? 'weather-hud-wrap--mobile-bar' : ''}`}>
+    <div className={`weather-hud-wrap ${compact ? 'weather-hud-wrap--compact' : ''} ${mobileMode ? 'weather-hud-wrap--mobile' : ''} ${mobileChip ? 'weather-hud-wrap--mobile-chip' : ''}`}>
       <button
         type="button"
-        className={`weather-hud weather-hud--btn weather-hud--${theme} ${compact ? 'weather-hud--compact' : ''} ${mobileBar ? 'weather-hud--mobile-bar' : ''} ${pickerOpen ? 'is-open' : ''}`}
+        className={`weather-hud weather-hud--btn weather-hud--${theme} ${compact ? 'weather-hud--compact' : ''} ${mobileBar ? 'weather-hud--mobile-bar' : ''} ${mobileChip ? 'weather-hud--mobile-chip' : ''} ${pickerOpen ? 'is-open' : ''}`}
         title={`${live.city} · ${live.weather} · ${modeLabel}${effectsEnabled ? '' : ' · 特效关'} · 点击设置`}
         onClick={() => setPickerOpen(!pickerOpen)}
         aria-expanded={pickerOpen}
         aria-haspopup="dialog"
+        aria-label={`天气 ${live.weather} ${live.temperature}度，点击设置`}
       >
-        <Icon size={mobileBar ? 16 : compact ? 13 : 14} className="weather-hud__icon" aria-hidden="true" />
+        <Icon size={mobileChip ? 16 : mobileBar ? 16 : compact ? 13 : 14} className="weather-hud__icon" aria-hidden="true" />
         <span className="weather-hud__text">
-          {mobileBar ? (
+          {mobileChip ? (
+            <>
+              <span className="weather-hud__chip-main">{live.weather}</span>
+              <span className="weather-hud__chip-temp">{live.temperature}°</span>
+            </>
+          ) : mobileBar ? (
             <>
               <span className="weather-hud__primary">{live.weather} {live.temperature}°</span>
               <span className="weather-hud__secondary">海淀 · {themeLabel}氛围 · {modeLabel}</span>
@@ -92,11 +110,11 @@ export default function WeatherHud({ compact = false, mobileBar = false, isInner
             </>
           )}
         </span>
-        {!mobileBar && <span className="weather-hud__mode">{modeLabel}</span>}
-        {!effectsEnabled && <span className="weather-hud__off">FX关</span>}
-        <ChevronDown size={mobileBar ? 14 : 12} className="weather-hud__chev" aria-hidden="true" />
+        {!mobileBar && !mobileChip && <span className="weather-hud__mode">{modeLabel}</span>}
+        {!effectsEnabled && !mobileChip && <span className="weather-hud__off">FX关</span>}
+        <ChevronDown size={mobileChip ? 12 : mobileBar ? 14 : 12} className="weather-hud__chev" aria-hidden="true" />
       </button>
-      <WeatherPicker compact={compact || mobileBar} isInner={isInner} />
+      <WeatherPicker compact={compact || mobileMode} isInner={isInner} />
     </div>
   )
 }

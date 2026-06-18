@@ -482,6 +482,57 @@ html, body {
   margin-top: 0;
 }
 
+.weather-hud-wrap--mobile-chip {
+  flex: 1;
+  min-width: 0;
+  max-width: 132px;
+}
+
+.weather-hud--mobile-chip {
+  width: 100%;
+  min-height: 44px;
+  min-width: 88px;
+  padding: 0 10px;
+  gap: 4px;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  background: rgba(8, 12, 22, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+}
+
+.weather-hud--mobile-chip.is-loading,
+.weather-hud--mobile-chip.weather-hud--loading {
+  min-width: 88px;
+}
+
+.weather-hud--mobile-chip .weather-hud__text {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 3px;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.weather-hud__chip-main {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(240, 248, 255, 0.95);
+}
+
+.weather-hud__chip-temp {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--theme-primary, #45e8f5);
+}
+
+.weather-hud--mobile-chip .weather-hud__chev {
+  opacity: 0.55;
+  flex-shrink: 0;
+}
+
 .weather-hud--mobile-bar {
   width: 100%;
   min-height: 44px;
@@ -2247,7 +2298,7 @@ html, body {
 }
 
 .top-safe-offset {
-  top: calc(max(12px, env(safe-area-inset-top)) + 100px);
+  top: calc(max(12px, env(safe-area-inset-top)) + 64px);
 }
 
 .desktop-only {
@@ -2278,6 +2329,42 @@ html, body {
   padding-bottom: 8px;
   background: linear-gradient(180deg, rgba(0, 0, 0, 0.55) 0%, transparent 100%);
   pointer-events: none;
+}
+
+.mobile-top-bar__row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.mobile-top-bar__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex: 1;
+  padding: 8px 10px;
+  border-radius: 12px;
+}
+
+.mobile-top-bar__title {
+  font-size: 12px;
+  font-weight: 700;
+  font-family: 'Orbitron', 'JetBrains Mono', monospace;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mobile-top-bar__menu {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: 12px;
+  flex-shrink: 0;
 }
 
 .mobile-top-bar > * {

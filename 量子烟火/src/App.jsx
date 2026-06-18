@@ -104,19 +104,20 @@ export default function App() {
 
       {/* 移动端：顶部精简栏 */}
       {isMobile ? (
-        <div className="mobile-top-bar absolute top-0 left-0 right-0 z-50 flex flex-col gap-2 px-3 pt-safe">
-          <div className="flex items-center justify-between w-full gap-2 pointer-events-auto">
-            <div className="hud-glass flex items-center gap-2 px-2.5 py-1.5 rounded-xl min-w-0">
+        <div className="mobile-top-bar absolute top-0 left-0 right-0 z-[60] flex flex-col gap-2 px-3 pt-safe">
+          <div className="mobile-top-bar__row pointer-events-auto">
+            <div className="mobile-top-bar__brand hud-glass">
               <AppIconMark size={28} />
-              <span className="text-xs font-bold font-display text-theme-primary truncate">
+              <span className="mobile-top-bar__title text-theme-primary">
                 量子烟火
               </span>
             </div>
+            <WeatherHud mobileChip isInner={isInner} />
             <button
               onClick={() => setPanelOpen(!isPanelOpen)}
               aria-label={isPanelOpen ? '收起面板' : '展开面板'}
               className={`
-                hud-glass min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl transition-all shrink-0
+                mobile-top-bar__menu hud-glass touch-target
                 ${isInner
                   ? 'text-cyan-400/80 border border-cyan-400/20'
                   : 'text-orange-400/80 border border-orange-400/20'
@@ -125,9 +126,6 @@ export default function App() {
             >
               {isPanelOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
-          </div>
-          <div className="w-full pointer-events-auto">
-            <WeatherHud mobileBar isInner={isInner} />
           </div>
         </div>
       ) : (
