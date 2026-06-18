@@ -103,8 +103,20 @@ export const useWeatherStore = create((set, get) => {
         return live
       } catch (e) {
         console.warn('天气加载失败，使用默认晴好氛围', e.message)
-        set({ theme: 'clear', live: null, status: 'error', source: 'live' })
-        return null
+        const fallback = {
+          city: '海淀区',
+          adcode: '110108',
+          weather: '晴',
+          theme: 'clear',
+          temperature: '--',
+          windDirection: '',
+          windPower: '',
+          humidity: '',
+          reportTime: '',
+          stale: true,
+        }
+        applyLive(set, fallback, 'live')
+        return fallback
       }
     },
 

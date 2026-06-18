@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react'
 import { ChevronDown, Cloud, CloudFog, CloudRain, CloudSnow, Sun } from 'lucide-react'
 import { useWeatherStore } from '../../store/weatherStore'
+import { WEATHER_THEMES } from '../../constants/weatherThemes'
 import { usesLightHaze } from '../../constants/weatherThemes'
 import WeatherPicker from './WeatherPicker'
 import SnowflakeIcon from './SnowflakeIcon'
@@ -16,7 +17,7 @@ function pickIcon(theme, weatherText = '') {
 }
 
 /** 顶部实况天气 HUD（点击打开设置） */
-export default function WeatherHud({ compact = false, isInner = true }) {
+export default function WeatherHud({ compact = false, mobileBar = false, isInner = true }) {
   const live = useWeatherStore(s => s.live)
   const status = useWeatherStore(s => s.status)
   const theme = useWeatherStore(s => s.theme)
@@ -24,17 +25,34 @@ export default function WeatherHud({ compact = false, isInner = true }) {
   const effectsEnabled = useWeatherStore(s => s.effectsEnabled)
   const pickerOpen = useWeatherStore(s => s.pickerOpen)
   const setPickerOpen = useWeatherStore(s => s.setPickerOpen)
+  const loadWeather = useWeatherStore(s => s.loadWeather)
 
   if (status === 'loading') {
     return (
-      <div className={`weather-hud weather-hud--loading ${compact ? 'weather-hud--compact' : ''}`} aria-live="polite">
+      <div className={`weather-hud weather-hud--loading ${compact ? 'weather-hud--compact' : ''} ${mobileBar ? 'weather-hud--mobile-bar' : ''}`} aria-live="polite">
         <span className="weather-hud__shimmer" />
         <span className="weather-hud__text">同步海淀天气…</span>
       </div>
     )
   }
 
-  if (!live) return null
+  if (!live) {
+    return (
+      <div className={`weather-hud-wrap ${mobileBar ? 'weather-hud-wrap--mobile-bar' : ''}`}>
+        <button
+          type="button"
+          className={`weather-hud weather-hud--btn weather-hud--error ${mobileBar ? 'weather-hud--mobile-bar' : ''}`}
+          onClick={() => loadWeather()}
+          aria-haspopup="dialog"
+        >
+          <Cloud size={14} className="weather-hud__icon" aria-hidden="true" />
+          <span className="weather-hud__text">点击加载海淀天气</span>
+          <ChevronDown size={12} className="weather-hud__chev" aria-hidden="true" />
+        </button>
+        <WeatherPicker compact={compact || mobileBar} isInner={isInner} />
+      </div>
+    )
+  }
 
   const Icon = pickIcon(theme, live.weather)
   const modeLabel = source === 'live'
@@ -42,20 +60,26 @@ export default function WeatherHud({ compact = false, isInner = true }) {
     : source === 'url'
       ? '演示'
       : '自选'
+  const themeLabel = WEATHER_THEMES[theme]?.label || live.weather
 
   return (
-    <div className={`weather-hud-wrap ${compact ? 'weather-hud-wrap--compact' : ''}`}>
+    <div className={`weather-hud-wrap ${compact ? 'weather-hud-wrap--compact' : ''} ${mobileBar ? 'weather-hud-wrap--mobile-bar' : ''}`}>
       <button
         type="button"
-        className={`weather-hud weather-hud--btn weather-hud--${theme} ${compact ? 'weather-hud--compact' : ''} ${pickerOpen ? 'is-open' : ''}`}
+        className={`weather-hud weather-hud--btn weather-hud--${theme} ${compact ? 'weather-hud--compact' : ''} ${mobileBar ? 'weather-hud--mobile-bar' : ''} ${pickerOpen ? 'is-open' : ''}`}
         title={`${live.city} · ${live.weather} · ${modeLabel}${effectsEnabled ? '' : ' · 特效关'} · 点击设置`}
         onClick={() => setPickerOpen(!pickerOpen)}
         aria-expanded={pickerOpen}
         aria-haspopup="dialog"
       >
-        <Icon size={compact ? 13 : 14} className="weather-hud__icon" aria-hidden="true" />
+        <Icon size={mobileBar ? 16 : compact ? 13 : 14} className="weather-hud__icon" aria-hidden="true" />
         <span className="weather-hud__text">
-          {compact ? (
+          {mobileBar ? (
+            <>
+              <span className="weather-hud__primary">{live.weather} {live.temperature}°</span>
+              <span className="weather-hud__secondary">海淀 · {themeLabel}氛围 · {modeLabel}</span>
+            </>
+          ) : compact ? (
             <>
               {live.weather} {live.temperature}°
             </>
@@ -68,18 +92,18 @@ export default function WeatherHud({ compact = false, isInner = true }) {
             </>
           )}
         </span>
-        <span className="weather-hud__mode">{modeLabel}</span>
+        {!mobileBar && <span className="weather-hud__mode">{modeLabel}</span>}
         {!effectsEnabled && <span className="weather-hud__off">FX关</span>}
-        <ChevronDown size={12} className="weather-hud__chev" aria-hidden="true" />
+        <ChevronDown size={mobileBar ? 14 : 12} className="weather-hud__chev" aria-hidden="true" />
       </button>
-      <WeatherPicker compact={compact} isInner={isInner} />
+      <WeatherPicker compact={compact || mobileBar} isInner={isInner} />
     </div>
   )
 }
 
 /** 全屏天气粒子 / 氛围层 */
-export function WeatherAtmosphere({ theme = 'clear', effectsEnabled = true, fxBoost = false }) {
-  const boost = fxBoost
+export function WeatherAtmosphere({ theme = 'clear', effectsEnabled = true, fxBoost = false, isMobile = false }) {
+  const boost = fxBoost || isMobile
 
   const snowflakes = useMemo(
     () => Array.from({ length: boost ? 44 : 36 }, (_, i) => {
@@ -127,7 +151,7 @@ export function WeatherAtmosphere({ theme = 'clear', effectsEnabled = true, fxBo
   if (theme === 'clear') return null
 
   return (
-    <div className={`weather-fx weather-fx--${theme} ${boost ? 'weather-fx--boost' : ''}`} aria-hidden="true">
+    <div className={`weather-fx weather-fx--${theme} ${boost ? 'weather-fx--boost' : ''} ${isMobile ? 'weather-fx--mobile' : ''}`} aria-hidden="true">
       {theme === 'rain' && (
         <div className="weather-fx__rain">
           {rainLines.map(line => (

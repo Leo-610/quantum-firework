@@ -16,6 +16,7 @@ import { useIsMobile } from './hooks/useMediaQuery'
 import { useAppBoot } from './hooks/useAppBoot'
 import SplashScreen from './components/SplashScreen'
 import WeatherHud, { WeatherAtmosphere } from './components/Weather/WeatherHud'
+import MobileWeatherQuickPanel from './components/Weather/MobileWeatherQuickPanel'
 import { useWeatherStore } from './store/weatherStore'
 
 export default function App() {
@@ -98,33 +99,36 @@ export default function App() {
         theme={weatherTheme}
         effectsEnabled={effectsEnabled}
         fxBoost={weatherBoost}
+        isMobile={isMobile}
       />
 
       {/* 移动端：顶部精简栏 */}
       {isMobile ? (
-        <div className="mobile-top-bar absolute top-0 left-0 right-0 z-50 flex items-center justify-between px-3 pt-safe">
-          <div className="hud-glass flex items-center gap-2 px-2.5 py-1.5 rounded-xl min-w-0">
-            <AppIconMark size={28} />
-            <div className="min-w-0">
-              <span className="text-xs font-bold font-display text-theme-primary block">
+        <div className="mobile-top-bar absolute top-0 left-0 right-0 z-50 flex flex-col gap-2 px-3 pt-safe">
+          <div className="flex items-center justify-between w-full gap-2 pointer-events-auto">
+            <div className="hud-glass flex items-center gap-2 px-2.5 py-1.5 rounded-xl min-w-0">
+              <AppIconMark size={28} />
+              <span className="text-xs font-bold font-display text-theme-primary truncate">
                 量子烟火
               </span>
-              <WeatherHud compact isInner={isInner} />
             </div>
+            <button
+              onClick={() => setPanelOpen(!isPanelOpen)}
+              aria-label={isPanelOpen ? '收起面板' : '展开面板'}
+              className={`
+                hud-glass min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl transition-all shrink-0
+                ${isInner
+                  ? 'text-cyan-400/80 border border-cyan-400/20'
+                  : 'text-orange-400/80 border border-orange-400/20'
+                }
+              `}
+            >
+              {isPanelOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
           </div>
-          <button
-            onClick={() => setPanelOpen(!isPanelOpen)}
-            aria-label={isPanelOpen ? '收起面板' : '展开面板'}
-            className={`
-              hud-glass min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl transition-all
-              ${isInner
-                ? 'text-cyan-400/80 border border-cyan-400/20'
-                : 'text-orange-400/80 border border-orange-400/20'
-              }
-            `}
-          >
-            {isPanelOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
+          <div className="w-full pointer-events-auto">
+            <WeatherHud mobileBar isInner={isInner} />
+          </div>
         </div>
       ) : (
         <>
@@ -220,6 +224,12 @@ export default function App() {
                 <span className="mobile-sheet-grab" />
                 <ChevronDown size={16} className="opacity-40 mt-0.5" />
               </button>
+            )}
+
+            {isMobile && (
+              <div className="px-3 pb-3 shrink-0 border-b border-white/5">
+                <MobileWeatherQuickPanel isInner={isInner} />
+              </div>
             )}
 
             {isMobile && (
