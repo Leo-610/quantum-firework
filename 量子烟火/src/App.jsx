@@ -14,6 +14,7 @@ import { useEmotionStore } from './store/emotionStore'
 import { useIsMobile } from './hooks/useMediaQuery'
 
 import { useAppBoot } from './hooks/useAppBoot'
+import SplashScreen from './components/SplashScreen'
 import SiteMusicPlayer from './components/Music/SiteMusicPlayer'
 import WeatherHud, { WeatherAtmosphere } from './components/Weather/WeatherHud'
 import { useWeatherStore } from './store/weatherStore'
