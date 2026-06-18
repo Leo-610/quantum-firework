@@ -16,7 +16,6 @@ import { useIsMobile } from './hooks/useMediaQuery'
 import { useAppBoot } from './hooks/useAppBoot'
 import SplashScreen from './components/SplashScreen'
 import WeatherHud, { WeatherAtmosphere } from './components/Weather/WeatherHud'
-import MobileWeatherQuickPanel from './components/Weather/MobileWeatherQuickPanel'
 import { useWeatherStore } from './store/weatherStore'
 
 export default function App() {
@@ -29,6 +28,7 @@ export default function App() {
   const weatherSource = useWeatherStore(s => s.source)
   const effectsEnabled = useWeatherStore(s => s.effectsEnabled)
   const loadWeather = useWeatherStore(s => s.loadWeather)
+  const setPickerOpen = useWeatherStore(s => s.setPickerOpen)
   const weatherBoost = weatherSource === 'manual' || weatherSource === 'url'
 
   useEffect(() => {
@@ -39,9 +39,13 @@ export default function App() {
   }, [])
 
   useEffect(() => {
-    if (!bootComplete) return
+    if (!bootComplete || isMobile) return
     loadWeather()
-  }, [bootComplete, loadWeather])
+  }, [bootComplete, loadWeather, isMobile])
+
+  useEffect(() => {
+    if (isMobile) setPickerOpen(false)
+  }, [isMobile, setPickerOpen])
 
   useEffect(() => {
     const onKeyDown = (e) => {
@@ -81,9 +85,9 @@ export default function App() {
     <>
     <div
       className={`relative w-full h-screen overflow-hidden world-shell world-transition ${isInner ? 'world-inner' : 'world-outer'} ${bootComplete ? '' : 'pointer-events-none'}`}
-      data-weather={weatherTheme}
-      data-weather-forced={weatherBoost ? 'true' : 'false'}
-      data-weather-effects={effectsEnabled ? 'true' : 'false'}
+      data-weather={isMobile ? 'clear' : weatherTheme}
+      data-weather-forced={isMobile ? 'false' : (weatherBoost ? 'true' : 'false')}
+      data-weather-effects={isMobile ? 'false' : (effectsEnabled ? 'true' : 'false')}
       aria-hidden={!bootComplete}
     >
       <MapCanvas />
@@ -95,38 +99,36 @@ export default function App() {
       </div>
 
       <div className="world-atmosphere" aria-hidden="true" />
-      <WeatherAtmosphere
-        theme={weatherTheme}
-        effectsEnabled={effectsEnabled}
-        fxBoost={weatherBoost}
-        isMobile={isMobile}
-      />
+      {!isMobile && (
+        <WeatherAtmosphere
+          theme={weatherTheme}
+          effectsEnabled={effectsEnabled}
+          fxBoost={weatherBoost}
+        />
+      )}
 
-      {/* 移动端：顶部精简栏 */}
+      {/* 移动端：顶部精简栏（不含天气，减轻性能压力） */}
       {isMobile ? (
-        <div className="mobile-top-bar absolute top-0 left-0 right-0 z-[60] flex flex-col gap-2 px-3 pt-safe">
-          <div className="mobile-top-bar__row pointer-events-auto">
-            <div className="mobile-top-bar__brand hud-glass">
-              <AppIconMark size={28} />
-              <span className="mobile-top-bar__title text-theme-primary">
-                量子烟火
-              </span>
-            </div>
-            <WeatherHud mobileChip isInner={isInner} />
-            <button
-              onClick={() => setPanelOpen(!isPanelOpen)}
-              aria-label={isPanelOpen ? '收起面板' : '展开面板'}
-              className={`
-                mobile-top-bar__menu hud-glass touch-target
-                ${isInner
-                  ? 'text-cyan-400/80 border border-cyan-400/20'
-                  : 'text-orange-400/80 border border-orange-400/20'
-                }
-              `}
-            >
-              {isPanelOpen ? <X size={20} /> : <Menu size={20} />}
-            </button>
+        <div className="mobile-top-bar absolute top-0 left-0 right-0 z-50 flex items-center justify-between px-3 pt-safe gap-2">
+          <div className="hud-glass mobile-top-bar__brand pointer-events-auto">
+            <AppIconMark size={28} />
+            <span className="mobile-top-bar__title text-theme-primary">
+              量子烟火
+            </span>
           </div>
+          <button
+            onClick={() => setPanelOpen(!isPanelOpen)}
+            aria-label={isPanelOpen ? '收起面板' : '展开面板'}
+            className={`
+              mobile-top-bar__menu hud-glass touch-target pointer-events-auto
+              ${isInner
+                ? 'text-cyan-400/80 border border-cyan-400/20'
+                : 'text-orange-400/80 border border-orange-400/20'
+              }
+            `}
+          >
+            {isPanelOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
         </div>
       ) : (
         <>
@@ -222,12 +224,6 @@ export default function App() {
                 <span className="mobile-sheet-grab" />
                 <ChevronDown size={16} className="opacity-40 mt-0.5" />
               </button>
-            )}
-
-            {isMobile && (
-              <div className="px-3 pb-3 shrink-0 border-b border-white/5">
-                <MobileWeatherQuickPanel isInner={isInner} />
-              </div>
             )}
 
             {isMobile && (

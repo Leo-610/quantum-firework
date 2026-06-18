@@ -120,8 +120,8 @@ export default function WeatherHud({ compact = false, mobileBar = false, mobileC
 }
 
 /** 全屏天气粒子 / 氛围层 */
-export function WeatherAtmosphere({ theme = 'clear', effectsEnabled = true, fxBoost = false, isMobile = false }) {
-  const boost = fxBoost || isMobile
+export function WeatherAtmosphere({ theme = 'clear', effectsEnabled = true, fxBoost = false }) {
+  const boost = fxBoost
 
   const snowflakes = useMemo(
     () => Array.from({ length: boost ? 44 : 36 }, (_, i) => {
@@ -169,7 +169,7 @@ export function WeatherAtmosphere({ theme = 'clear', effectsEnabled = true, fxBo
   if (theme === 'clear') return null
 
   return (
-    <div className={`weather-fx weather-fx--${theme} ${boost ? 'weather-fx--boost' : ''} ${isMobile ? 'weather-fx--mobile' : ''}`} aria-hidden="true">
+    <div className={`weather-fx weather-fx--${theme} ${boost ? 'weather-fx--boost' : ''}`} aria-hidden="true">
       {theme === 'rain' && (
         <div className="weather-fx__rain">
           {rainLines.map(line => (

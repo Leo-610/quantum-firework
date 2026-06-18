@@ -2298,7 +2298,7 @@ html, body {
 }
 
 .top-safe-offset {
-  top: calc(max(12px, env(safe-area-inset-top)) + 64px);
+  top: calc(max(12px, env(safe-area-inset-top)) + 52px);
 }
 
 .desktop-only {

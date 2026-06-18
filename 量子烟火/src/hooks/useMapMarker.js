@@ -88,9 +88,9 @@ export function useMap(containerId) {
     buildingsRef.current = setWorldStyle(mapRef.current, buildingsRef.current, world)
   }, [world])
 
-  // 实况天气 → 地图 pitch 微调
+  // 实况天气 → 地图 pitch 微调（移动端跳过）
   useEffect(() => {
-    if (!mapRef.current) return
+    if (!mapRef.current || isMobile) return
     applyWeatherToMap(mapRef.current, weatherTheme, { isMobile })
   }, [weatherTheme, isMobile])
 
