@@ -33,33 +33,3 @@ export const RADAR_DISCLAIMER = {
     '指标含义（性价比、抗饿度等）仅供娱乐参考，不具备专业测评效力',
   ],
 }
-
-export const COUNSELING_CENTER = {
-  id: 'psych_center',
-  name: '心理素质教育中心',
-  type: 'counseling',
-  poiKeywords: [
-    '北京交通大学心理素质教育中心',
-    '心理素质教育中心',
-    '学生心理中心',
-    '北京交通大学第二教学楼',
-    '第二教学楼',
-  ],
-  // 主校区第二教学楼 2 号楼（坐标拾取实测）
-  lng: 116.340592,
-  lat: 39.952362,
-  accentColor: '#6ee7b7',
-  info: {
-    org: '北京交通大学心理素质教育中心',
-    building: '主校区第二教学楼',
-    audience: '面向本校全日制本科生、研究生及教职工',
-    service: '提供免费心理咨询服务；全日制在校生可通过学校预约系统进行一对一咨询',
-    address: '北京市海淀区上园村3号 北京交通大学主校区第二教学楼',
-    studentPhone: '010-51685166',
-    studentPhoneLabel: '学生心理中心（专兼职咨询师接听）',
-    staffPhone: '010-51685882',
-    staffPhoneLabel: '教职工关爱工作室',
-    hours: '请通过学校官方预约系统查询可预约时段',
-  },
-  tags: ['第二教学楼', '免费咨询', '预约制'],
-}

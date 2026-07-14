@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo } from 'react'
 import { ChevronDown, Cloud, CloudFog, CloudRain, CloudSnow, Sun } from 'lucide-react'
+import { campus } from '../../config/campus'
 import { useWeatherStore } from '../../store/weatherStore'
 import { WEATHER_THEMES } from '../../constants/weatherThemes'
 import { usesLightHaze } from '../../constants/weatherThemes'
@@ -42,7 +43,7 @@ export default function WeatherHud({ compact = false, mobileBar = false, mobileC
         aria-live="polite"
       >
         <span className="weather-hud__shimmer" />
-        <span className="weather-hud__text">{mobileChip ? '天气' : '同步海淀天气…'}</span>
+        <span className="weather-hud__text">{mobileChip ? '天气' : `同步${campus.weatherLabel}天气…`}</span>
       </div>
     )
   }
@@ -55,10 +56,10 @@ export default function WeatherHud({ compact = false, mobileBar = false, mobileC
           className={`weather-hud weather-hud--btn weather-hud--error ${mobileBar ? 'weather-hud--mobile-bar' : ''} ${mobileChip ? 'weather-hud--mobile-chip' : ''}`}
           onClick={() => loadWeather()}
           aria-haspopup="dialog"
-          aria-label="加载海淀天气"
+          aria-label={`加载${campus.weatherLabel}天气`}
         >
           <Cloud size={mobileChip ? 16 : 14} className="weather-hud__icon" aria-hidden="true" />
-          <span className="weather-hud__text">{mobileChip ? '天气' : '点击加载海淀天气'}</span>
+          <span className="weather-hud__text">{mobileChip ? '天气' : `点击加载${campus.weatherLabel}天气`}</span>
           <ChevronDown size={12} className="weather-hud__chev" aria-hidden="true" />
         </button>
         <WeatherPicker compact={compact || mobileMode} isInner={isInner} />
@@ -95,7 +96,7 @@ export default function WeatherHud({ compact = false, mobileBar = false, mobileC
           ) : mobileBar ? (
             <>
               <span className="weather-hud__primary">{live.weather} {live.temperature}°</span>
-              <span className="weather-hud__secondary">海淀 · {themeLabel}氛围 · {modeLabel}</span>
+              <span className="weather-hud__secondary">{campus.weatherLabel} · {themeLabel}氛围 · {modeLabel}</span>
             </>
           ) : compact ? (
             <>

@@ -1,96 +1,10 @@
 // ═══════════════════════════════════
-// 高德地图 API 封装 v2 - POI 校园内定位
+// 高德地图 API 封装 v2 - 校园地标定位
 // ═══════════════════════════════════
 
-import { COUNSELING_CENTER } from '../constants/disclaimers.js'
+import { CAMPUS_LANDMARKS, CAMPUS_MAP } from '../config/campus/index.js'
 
-/** 北交大校园中心坐标（实测标定）& 搜索半径 */
-const BJTU_CENTER = [116.3415, 39.9512]
-const BJTU_RADIUS = 800  // 米，覆盖整个主校区
-
-/**
- * 北交大地标配置（坐标均为坐标拾取工具实测）
- * poiKeywords: 多个候选关键词，依次尝试直到命中
- */
-export const BJTU_LANDMARKS = [
-  {
-    id: 'canteen_xuehuo', name: '学活食堂', type: 'canteen',
-    poiKeywords: ['北京交通大学学活食堂', '学活食堂', '交大学活'],
-    lng: 116.338075, lat: 39.950509, // ✅ 实测
-  },
-  {
-    id: 'canteen_hgyfood', name: '红果园餐厅', type: 'canteen',
-    poiKeywords: ['红果园餐厅', '北京交通大学红果园餐厅'],
-    lng: 116.344300, lat: 39.950798, // ✅ 实测
-  },
-  {
-    id: 'canteen_4', name: '四食堂', type: 'canteen',
-    poiKeywords: ['学生四食堂', '北京交通大学四食堂'],
-    lng: 116.344124, lat: 39.949764, // ✅ 实测
-  },
-  {
-    id: 'siyuan', name: '思源楼', type: 'academic',
-    poiKeywords: ['思源楼', '北京交通大学思源楼'],
-    lng: 116.340860, lat: 39.951549, // ✅ 实测（精确版）
-  },
-  {
-    id: 'library', name: '图书馆', type: 'academic',
-    poiKeywords: ['北京交通大学图书馆', '交大图书馆'],
-    lng: 116.343430, lat: 39.952100, // ✅ 实测
-  },
-  {
-    id: 'lab', name: '计算机学院', type: 'academic',
-    poiKeywords: ['北京交通大学计算机学院', '计算机科学与技术学院'],
-    lng: 116.342295, lat: 39.950188, // ✅ 实测
-  },
-  {
-    id: 'field', name: '西操场', type: 'outdoor',
-    poiKeywords: ['北京交通大学体育场', '交大西操场'],
-    lng: 116.337853, lat: 39.952441, // ✅ 实测
-  },
-  {
-    id: 'dorm', name: '嘉园宿舍区', type: 'dorm',
-    poiKeywords: ['北京交通大学嘉园', '嘉园学生公寓'],
-    lng: 116.342621, lat: 39.948929, // ✅ 实测
-  },
-  {
-    id: 'statue_mao', name: '毛主席像', type: 'heritage',
-    poiKeywords: ['毛主席像 北京交通大学', '北交大 毛主席像', '北京交通大学 毛主席像'],
-    lng: 116.342100, lat: 39.950509, // ✅ 实测
-    story: {
-      title: '校园精神地标',
-      summary: '作为校园精神地标之一，毛主席像见证了一代代交大学子在此求知与成长。',
-      relation: '北交大源自交通强校传统，长期服务国家交通建设与工程人才培养。',
-      legacy: '象征面向国家需求、工程报国的使命感。',
-    },
-    tags: ['校史精神', '工程报国', '校园记忆'],
-  },
-  {
-    id: 'statue_zhan', name: '詹天佑像', type: 'heritage',
-    poiKeywords: ['詹天佑像 北京交通大学', '北交大 詹天佑像', '詹天佑像 交大'],
-    lng: 116.341002, lat: 39.950167, // ✅ 实测
-    story: {
-      title: '中国铁路先驱',
-      summary: '詹天佑主持修建京张铁路，是中国铁路工程的开拓者。',
-      relation: '北交大以交通为学科底色，铁路与轨道交通人才培养与其精神一脉相承。',
-      legacy: '代表自立自强的工程创新精神。',
-    },
-    tags: ['铁路先驱', '创新精神', '学科传承'],
-  },
-  {
-    id: 'statue_mao_yisheng', name: '茅以升像', type: 'heritage',
-    poiKeywords: ['茅以升像 北京交通大学', '北交大 茅以升像', '茅以升像 交大'],
-    lng: 116.343187, lat: 39.951818, // ✅ 实测
-    story: {
-      title: '中国桥梁工程奠基人',
-      summary: '茅以升主持修建钱塘江大桥，是中国桥梁工程的重要奠基者。',
-      relation: '北交大交通与土木相关学科注重工程实践，与其“学以致用”理念相契合。',
-      legacy: '象征严谨求实与工程创新。',
-    },
-    tags: ['严谨求实', '学以致用'],
-  },
-  COUNSELING_CENTER,
-]
+export { CAMPUS_LANDMARKS, CAMPUS_LANDMARKS as BJTU_LANDMARKS } from '../config/campus/index.js'
 
 /**
  * 使用 searchNearBy 在校园 800m 范围内精确定位
@@ -114,11 +28,10 @@ export function initAMap(containerId) {
 
     const map = new AMap.Map(containerId, {
       viewMode: '3D',
-      pitch: 55,
-      rotation: -10,
-      zoom: 17.2,
-      // 北京交通大学主校区中心（实测标定：思源楼与学活食堂中间）
-      center: [116.3408, 39.9512],
+      pitch: CAMPUS_MAP.pitch,
+      rotation: CAMPUS_MAP.rotation,
+      zoom: CAMPUS_MAP.zoom,
+      center: CAMPUS_MAP.center,
       mapStyle: 'amap://styles/dark',
       showLabel: true,
       labelzIndex: 130,

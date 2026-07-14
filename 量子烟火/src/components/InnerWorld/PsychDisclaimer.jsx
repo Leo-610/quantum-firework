@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { AlertTriangle, HeartHandshake, Phone, MapPin, ChevronDown } from 'lucide-react'
-import { PSYCH_DISCLAIMER, COUNSELING_CENTER } from '../../constants/disclaimers'
+import { PSYCH_DISCLAIMER } from '../../constants/disclaimers'
+import { getCounselingCenter } from '../../config/campus'
 import { useWorldStore } from '../../store/worldStore'
 import { flyTo } from '../../api/amap'
 
@@ -9,23 +10,27 @@ export default function PsychDisclaimer() {
   const [open, setOpen] = useState(false)
   const mapInstance = useWorldStore(s => s.mapInstance)
   const setSelectedLandmark = useWorldStore(s => s.setSelectedLandmark)
+  const counselingCenter = getCounselingCenter()
 
   const setPanelOpen = useWorldStore(s => s.setPanelOpen)
 
   const showOnMap = () => {
+    if (!counselingCenter) return
     setPanelOpen(false)
-    setSelectedLandmark(COUNSELING_CENTER)
+    setSelectedLandmark(counselingCenter)
     if (mapInstance) {
       flyTo(mapInstance, {
-        lng: COUNSELING_CENTER.lng,
-        lat: COUNSELING_CENTER.lat,
+        lng: counselingCenter.lng,
+        lat: counselingCenter.lat,
         zoom: 18.2,
         pitch: 58,
       })
     }
   }
 
-  const { info } = COUNSELING_CENTER
+  if (!counselingCenter) return null
+
+  const { info } = counselingCenter
 
   return (
     <div className="psych-disclaimer">

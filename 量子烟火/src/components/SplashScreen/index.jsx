@@ -3,15 +3,16 @@ import { motion } from 'framer-motion'
 import {
   APP_ICON,
   LOGO_HORIZONTAL,
-  BJTU_BADGE_WHITE,
-  BJTU_WORDMARK_LIGHT,
+  CAMPUS_BADGE_WHITE,
+  CAMPUS_WORDMARK_LIGHT,
   VOLCENGINE_LOGO_LIGHT,
 } from '../BrandAssets'
+import { campus } from '../../config/campus'
 import { useTypewriter } from '../../hooks/useTypewriter'
 
 const BURST_COUNT = 24
 
-function BJTUBrand({ blend = 0 }) {
+function CampusBrand({ blend = 0 }) {
   return (
     <motion.div
       className="splash-bjtu"
@@ -26,8 +27,8 @@ function BJTUBrand({ blend = 0 }) {
         }}
       >
         <motion.img
-          src={BJTU_BADGE_WHITE}
-          alt="北京交通大学校徽"
+          src={CAMPUS_BADGE_WHITE}
+          alt={`${campus.name}校徽`}
           className="splash-bjtu-badge"
           animate={{ rotate: [0, 2, -2, 0] }}
           transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
@@ -35,8 +36,8 @@ function BJTUBrand({ blend = 0 }) {
         <div className="splash-bjtu-badge-ring" aria-hidden="true" />
       </div>
       <img
-        src={BJTU_WORDMARK_LIGHT}
-        alt="北京交通大学 Beijing Jiaotong University"
+        src={CAMPUS_WORDMARK_LIGHT}
+        alt={`${campus.name} ${campus.englishName}`}
         className="splash-bjtu-wordmark"
       />
     </motion.div>
@@ -106,7 +107,7 @@ export default function SplashScreen({ progress = 0, phase = '初始化…' }) {
       <div className="splash-grid" aria-hidden="true" />
       <div className="splash-scanline" aria-hidden="true" />
 
-      <BJTUBrand blend={blend} />
+      <CampusBrand blend={blend} />
 
       <div className="splash-rings" aria-hidden="true">
         <motion.div
@@ -224,4 +225,4 @@ export default function SplashScreen({ progress = 0, phase = '初始化…' }) {
   )
 }
 
-export { BJTU_BADGE_WHITE, BJTUBrand }
+export { CAMPUS_BADGE_WHITE, CampusBrand }

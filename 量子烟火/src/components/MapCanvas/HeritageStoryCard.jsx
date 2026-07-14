@@ -1,6 +1,7 @@
 import React from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { X, MapPin, BookOpen } from 'lucide-react'
+import { campus } from '../../config/campus'
 import { useWorldStore } from '../../store/worldStore'
 
 /** 校园历史地标故事卡 */
@@ -46,7 +47,7 @@ export default function HeritageStoryCard() {
             {story.summary && <p className="heritage-text">{story.summary}</p>}
             {story.relation && (
               <p className="heritage-text">
-                <span className="heritage-label"><MapPin size={12} /> 北交渊源</span>
+                <span className="heritage-label"><MapPin size={12} /> {campus.heritageLabel}</span>
                 {story.relation}
               </p>
             )}

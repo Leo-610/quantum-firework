@@ -5,36 +5,31 @@ import { useEmotionStore } from '../../store/emotionStore'
 import { useWorldStore } from '../../store/worldStore'
 import { useCozeChat } from '../../hooks/useCozeChat'
 import { runEmotionWorkflow } from '../../api/coze'
-import { BJTU_LANDMARKS } from '../../api/amap'
+import { CAMPUS_INNER_LOCATIONS, getLiveCoords } from '../../config/campus'
 import Sigil from '../Sigil'
 import EchoCard from './EchoCard'
 import PlantEffect from './PlantEffect'
 import PsychDisclaimer from './PsychDisclaimer'
 
-const LOCATIONS = [
-  { id: 'siyuan',  name: '思源楼',     Icon: Landmark },
-  { id: 'library', name: '图书馆',     Icon: BookOpen },
-  { id: 'lab',     name: '实验室',     Icon: Laptop },
-  { id: 'field',   name: '操场',       Icon: Activity },
-  { id: 'dorm',    name: '宿舍',       Icon: Home },
-  { id: 'garden',  name: '红果园',     Icon: Leaf },
-]
-
-function getLiveCoords(id) {
-  // 红果园情绪落点：主校区红果园餐厅一带（地图不再单独标注错误远点）
-  if (id === 'garden') {
-    const hgy = BJTU_LANDMARKS.find(lm => lm.id === 'canteen_hgyfood')
-    if (hgy) return { lng: hgy.lng, lat: hgy.lat }
-  }
-  const found = BJTU_LANDMARKS.find(lm => lm.id === id)
-  if (found) return { lng: found.lng, lat: found.lat }
-  return null
+const LOC_ICONS = {
+  siyuan: Landmark,
+  boya: Landmark,
+  library: BookOpen,
+  lab: Laptop,
+  field: Activity,
+  dorm: Home,
+  garden: Leaf,
 }
+
+const LOCATIONS = CAMPUS_INNER_LOCATIONS.map(loc => ({
+  ...loc,
+  Icon: LOC_ICONS[loc.id] || MapPin,
+}))
 
 /** 里世界主面板 */
 export default function InnerWorldPanel({ isMobile = false }) {
   const [input, setInput] = useState('')
-  const [selectedLoc, setSelectedLoc] = useState('siyuan')
+  const [selectedLoc, setSelectedLoc] = useState(CAMPUS_INNER_LOCATIONS[0]?.id || 'library')
   const [showPlant, setShowPlant] = useState(false)
   const [plantData, setPlantData] = useState(null)
   const [error, setError] = useState(null)

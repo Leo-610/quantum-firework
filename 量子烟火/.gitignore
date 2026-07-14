@@ -29,3 +29,7 @@ Thumbs.db
 
 # Vercel
 .vercel
+.env.local
+!.env.example
+!.env.pku.example
+!.env.vercel.example

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useCallback } from 'react'
 import {
-  BJTU_LANDMARKS,
+  CAMPUS_LANDMARKS,
   initAMap,
   addLandmarkMarkers,
   addEmotionPillar,
@@ -55,7 +55,7 @@ export function useMap(containerId) {
         }
 
         // 直接使用硬编码坐标渲染
-        addMarkers(BJTU_LANDMARKS)
+        addMarkers(CAMPUS_LANDMARKS)
         console.log('✅ 使用硬编码地标坐标')
 
         // 开发模式：挂载坐标拾取工具到 window

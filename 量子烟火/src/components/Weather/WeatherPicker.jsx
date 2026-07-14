@@ -12,6 +12,7 @@ import {
   Sun,
   X,
 } from 'lucide-react'
+import { campus } from '../../config/campus'
 import { WEATHER_THEME_KEYS, WEATHER_THEMES } from '../../constants/weatherThemes'
 import { useIsMobile } from '../../hooks/useMediaQuery'
 import { useWeatherStore } from '../../store/weatherStore'
@@ -96,7 +97,7 @@ function WeatherPickerPanel({
         }}
       >
         <RefreshCw size={13} />
-        恢复海淀实况
+        恢复{campus.weatherLabel}实况
         {source === 'live' && <span className="weather-picker__live-badge">当前</span>}
       </button>
 

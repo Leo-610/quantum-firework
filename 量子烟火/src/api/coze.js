@@ -3,6 +3,8 @@
 // Token 仅存于 量子烟火-server/.env，失败时降级 Mock
 // ═══════════════════════════════════════════════════════════════════
 
+import { CAMPUS_EMOTION_LOCATION_MAP } from '../config/campus'
+
 const API_BASE = import.meta.env.VITE_API_BASE || '/api'
 
 async function apiPost(path, body) {
@@ -1081,17 +1083,10 @@ function mockEmotionWorkflow({ userText, location }) {
     selected = MOCK_PLANTS[Math.floor(Math.random() * MOCK_PLANTS.length)]
   }
 
-  // 根据位置调整植物（北交大场景加成）
+  // 根据位置调整植物（校园场景加成）
   let locationBonus = ''
   if (location && location.name) {
-    const locationMap = {
-      '思源楼': '思源楼的灯光依然亮着，它见证过无数个深夜奋战的背影。',
-      '图书馆': '图书馆的书脊沉默地排列着，它们知道你的困惑，因为它们曾被无数人翻阅。',
-      '操场': '操场上的风轻轻吹过，它带走过无数心事，也带来过无数释然。',
-      '红果园': '红果园的老树静静伫立，它拥抱过太多情绪，此刻也在这里陪着你。',
-      '嘉园': '嘉园的走廊深夜依然亮着灯，每扇门后都是一个不同的宇宙，你也是。',
-    }
-    locationBonus = locationMap[location.name] || ''
+    locationBonus = CAMPUS_EMOTION_LOCATION_MAP[location.name] || ''
   }
 
   // 组合最终回响
@@ -1141,19 +1136,6 @@ function mockFoodWorkflow(userText, dishName, targetStyle = 'hupu') {
 
 // 导出风格列表供前端使用
 export const FOOD_STYLE_LIST = FOOD_STYLES
-
-// ═══════════════════════════════════════════════════════════════════
-// 导出配置常量
-// ═══════════════════════════════════════════════════════════════════
-export const BJTU_LANDMARKS = [
-  { name: '思源楼', lng: 116.307, lat: 39.955, emoji: '🏢', desc: '考前焦虑圣地' },
-  { name: '图书馆', lng: 116.308, lat: 39.956, emoji: '📚', desc: '安静到能听见心跳' },
-  { name: '操场', lng: 116.306, lat: 39.954, emoji: '🏃', desc: '跑圈时什么都可以想' },
-  { name: '红果园', lng: 116.305, lat: 39.957, emoji: '🌳', desc: '那棵老树' },
-  { name: '学苑食堂', lng: 116.307, lat: 39.954, emoji: '🍜', desc: '饱腹之源' },
-  { name: '学五食堂', lng: 116.308, lat: 39.955, emoji: '🍽️', desc: '网红食堂' },
-  { name: '二食堂', lng: 116.306, lat: 39.956, emoji: '🏪', desc: '经典选择' },
-]
 
 export const WORKFLOW_IDS = {
   emotion: '7649364360749531145',

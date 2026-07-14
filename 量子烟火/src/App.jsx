@@ -16,6 +16,7 @@ import { useIsMobile } from './hooks/useMediaQuery'
 import { useAppBoot } from './hooks/useAppBoot'
 import SplashScreen from './components/SplashScreen'
 import SiteMusicPlayer from './components/Music/SiteMusicPlayer'
+import { campus } from './config/campus'
 import WeatherHud, { WeatherAtmosphere } from './components/Weather/WeatherHud'
 import { useWeatherStore } from './store/weatherStore'
 
@@ -142,7 +143,7 @@ export default function App() {
                   <p className="text-sm font-bold font-display" style={{ color: isInner ? '#0ff0fc' : '#ff6b35' }}>
                     量子烟火
                   </p>
-                  <p className="text-[10px] font-mono opacity-40">北京交通大学</p>
+                  <p className="text-[10px] font-mono opacity-40">{campus.name}</p>
                 </div>
               </div>
               <WeatherHud isInner={isInner} />
@@ -323,7 +324,7 @@ export default function App() {
       {(!isMobile || isPanelOpen) && (
         <div className={`absolute z-40 pointer-events-none ${isMobile ? 'bottom-1 left-3 opacity-25' : 'bottom-2 right-4 opacity-20'}`}>
           <p className="text-[10px] font-mono text-theme-primary">
-            {isMobile ? 'BJTU · QF' : `Quantum Fireworks · BJTU · ${new Date().getFullYear()}`}
+            {isMobile ? `${campus.englishShort} · QF` : `Quantum Fireworks · ${campus.englishShort} · ${new Date().getFullYear()}`}
           </p>
         </div>
       )}

@@ -40,13 +40,26 @@ cd ../量子烟火 && bash scripts/coze-preview-run.sh
 
 ## 部署（Vercel + GitHub）
 
-| 分支 | 部署目标 | 域名 |
-|------|----------|------|
-| `main` | Production | https://bjtu.app · https://quantum-fireworks-ebon.vercel.app |
-| `develop` | Preview | 每次 Push 自动生成 Preview URL |
+| 分支 | 项目 | 部署目标 | 域名 |
+|------|------|----------|------|
+| `main` | `quantum-fireworks` | Production | https://bjtu.app · https://quantum-fireworks-ebon.vercel.app |
+| `main` | `quantum-fireworks-pku` | Production | https://quantum-fireworks-pku.vercel.app |
+| `develop` | 两项目 Preview | Preview | 每次 Push 自动生成 Preview URL |
 
-- **Vercel 项目**：`leo-610s-projects/quantum-fireworks`（Root Directory = `量子烟火`）
-- Push 到 `main` 后自动触发生产部署
+- **北交大 Vercel 项目**：`leo-610s-projects/quantum-fireworks`（Root Directory = `量子烟火`，默认 `VITE_CAMPUS=bjtu`）
+- **北大 Vercel 项目**：`leo-610s-projects/quantum-fireworks-pku`（Root Directory = `量子烟火`，`VITE_CAMPUS=pku`）
+- Push 到 `main` 后，若已连接 Git，两项目可分别自动部署
+
+### PKU 一键部署 / 更新
+
+```bash
+cd 量子烟火
+./scripts/vercel-deploy-pku.sh   # 同步 env + 生产部署
+```
+
+或首次完整配置：`./scripts/vercel-setup-pku.sh`
+
+PKU 环境变量模板见 `.env.pku.example`；Coze / 高德 Key 与北交大项目共用同一套 Token。
 
 ### 首次推送到 GitHub
 

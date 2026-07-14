@@ -2,22 +2,19 @@ import React, { useEffect, useState, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Building2, Utensils, MessageSquareText, Sparkles, Flame, Copy, Check } from 'lucide-react'
 import { runFoodWorkflow } from '../../api/coze'
-import { BJTU_LANDMARKS, flyTo } from '../../api/amap'
+import { CAMPUS_LANDMARKS, flyTo } from '../../api/amap'
+import { CAMPUS_CANTEENS } from '../../config/campus'
 import { useWorldStore } from '../../store/worldStore'
 import RadarChart from './RadarChart'
 import StyleRewriter from './StyleRewriter'
 import OuterFoodDisclaimer, { FoodResultNotice } from './OuterFoodDisclaimer'
 import Sigil from '../Sigil'
 
-const CANTEENS = [
-  { id: 'canteen_xuehuo', name: '学活食堂', Icon: Building2, desc: '校区中部，品种丰富' },
-  { id: 'canteen_hgyfood', name: '红果园餐厅', Icon: Building2, desc: '红果园区，环境舒适' },
-  { id: 'canteen_4', name: '四食堂', Icon: Building2, desc: '嘉园附近，学生公寓旁' },
-]
+const CANTEENS = CAMPUS_CANTEENS.map(c => ({ ...c, Icon: Building2 }))
 
 /** 表世界主面板 */
 export default function OuterWorldPanel({ isMobile = false }) {
-  const [selectedCanteen, setSelectedCanteen] = useState(CANTEENS[0].id)
+  const [selectedCanteen, setSelectedCanteen] = useState(CANTEENS[0]?.id || 'canteen_xuehuo')
   const [dishName, setDishName] = useState('')
   const [review, setReview] = useState('')
   const [style, setStyle] = useState('hupu')
@@ -36,7 +33,7 @@ export default function OuterWorldPanel({ isMobile = false }) {
 
   useEffect(() => {
     if (!mapInstance) return
-    const target = BJTU_LANDMARKS.find(lm => lm.id === selectedCanteen)
+    const target = CAMPUS_LANDMARKS.find(lm => lm.id === selectedCanteen)
     if (!target) return
     flyTo(mapInstance, { lng: target.lng, lat: target.lat, zoom: 18.2, pitch: 55 })
   }, [mapInstance, selectedCanteen])

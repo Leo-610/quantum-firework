@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useMap } from '../../hooks/useMapMarker'
 import { useWorldStore } from '../../store/worldStore'
 import { useEmotionStore } from '../../store/emotionStore'
+import { campus, CAMPUS_LANDMARKS } from '../../config/campus'
 import EmotionParticles from './EmotionParticles'
 import BJTULights from './BJTULights'
 
@@ -41,7 +42,7 @@ export default function MapCanvas() {
 
       {/* BJTU 点阵灯光效果 */}
       {mapReady && (
-        <BJTULights mapContainer={containerRef.current} />
+        <BJTULights mapContainer={containerRef.current} mapCanvasText={campus.mapCanvasText} />
       )}
 
       {/* 地图加载占位（AMap 未配置时显示） */}
@@ -118,7 +119,7 @@ function MapFallback({ world }) {
 
       <div className="relative z-10 text-center">
         <p className={`text-xs font-mono opacity-30 ${world === 'inner' ? 'text-cyan-400' : 'text-orange-400'}`}>
-          配置高德地图 Key 以显示北交大 3D 地图
+          配置高德地图 Key 以显示{campus.shortName} 3D 地图
         </p>
       </div>
     </div>
@@ -130,13 +131,17 @@ function MockBuildings({ world }) {
   const color = world === 'inner' ? '#0ff0fc' : '#ff6b35'
   const glowColor = world === 'inner' ? 'rgba(15,240,252,' : 'rgba(255,107,53,'
   
-  const buildings = [
-    { x: '20%', h: '120px', w: '60px', label: '图书馆', lights: 6 },
-    { x: '35%', h: '80px',  w: '80px', label: '学活食堂', lights: 4 },
-    { x: '50%', h: '160px', w: '50px', label: '思源楼', lights: 8 },
-    { x: '63%', h: '90px',  w: '70px', label: '红果园', lights: 5 },
-    { x: '77%', h: '100px', w: '55px', label: '嘉园宿舍', lights: 6 },
-  ]
+  const landmarkLabels = CAMPUS_LANDMARKS
+    .filter(lm => ['academic', 'canteen', 'dorm', 'outdoor'].includes(lm.type))
+    .slice(0, 5)
+
+  const buildings = landmarkLabels.map((lm, i) => ({
+    x: `${18 + i * 14}%`,
+    h: `${80 + (i % 3) * 30}px`,
+    w: `${50 + (i % 2) * 20}px`,
+    label: lm.name,
+    lights: 4 + (i % 4),
+  }))
 
   return (
     <div className="absolute bottom-[30%] left-0 right-0 flex items-end justify-around px-16 gap-3">

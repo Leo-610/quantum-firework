@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react'
+import { campus } from '../config/campus'
 
-const PHASES = [
-  { progress: 10, label: '量子场同步中…' },
-  { progress: 28, label: '加载北交大 3D 校园地图…' },
-  { progress: 52, label: '唤醒 Coze 里表世界智能体…' },
-  { progress: 74, label: '校准思源楼 · 图书馆 · 心理中心坐标…' },
-  { progress: 92, label: '点燃量子烟火，即将进入…' },
-  { progress: 100, label: '点火就绪 · 欢迎进入' },
-]
+function buildPhases() {
+  return [
+    { progress: 10, label: '量子场同步中…' },
+    { progress: 28, label: campus.bootPhases.map },
+    { progress: 52, label: '唤醒 Coze 里表世界智能体…' },
+    { progress: 74, label: campus.bootPhases.calibrate },
+    { progress: 92, label: '点燃量子烟火，即将进入…' },
+    { progress: 100, label: '点火就绪 · 欢迎进入' },
+  ]
+}
 
 function sleep(ms) {
   return new Promise(r => setTimeout(r, ms))
@@ -38,10 +41,11 @@ function waitForAMap(timeout = 12000) {
 export function useAppBoot() {
   const [complete, setComplete] = useState(false)
   const [progress, setProgress] = useState(0)
-  const [phase, setPhase] = useState(PHASES[0].label)
+  const [phase, setPhase] = useState(buildPhases()[0].label)
 
   useEffect(() => {
     let cancelled = false
+    const phases = buildPhases()
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
     async function boot() {
@@ -50,7 +54,7 @@ export function useAppBoot() {
 
       const step = (index) => {
         if (cancelled) return
-        const p = PHASES[index]
+        const p = phases[index]
         setProgress(p.progress)
         setPhase(p.label)
       }

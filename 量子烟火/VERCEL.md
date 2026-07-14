@@ -15,11 +15,24 @@ Vercel 部署使用 `api/` 目录，与 Express 共用 `api/_lib/coze-proxy.js` 
 
 ## 部署结果（2026-06-10）
 
-| 项 | 值 |
-|----|-----|
-| 生产域名 | https://quantum-fireworks-ebon.vercel.app |
-| Vercel 项目 | `leo-610s-projects/quantum-fireworks` |
-| 状态 | 静态资源已上线；**API 需配置环境变量后重新部署** |
+| 项 | 北交大 | 北大燕园 |
+|----|--------|----------|
+| 生产域名 | https://bjtu.app | https://quantum-fireworks-pku.vercel.app |
+| Vercel 项目 | `quantum-fireworks` | `quantum-fireworks-pku` |
+| 关键 env | 默认（无 `VITE_CAMPUS`） | `VITE_CAMPUS=pku` |
+| Dashboard | [quantum-fireworks](https://vercel.com/leo-610s-projects/quantum-fireworks) | [quantum-fireworks-pku](https://vercel.com/leo-610s-projects/quantum-fireworks-pku) |
+
+两项目共用同一 Git 仓库，**Root Directory 均设为 `量子烟火`**。北大版需在 PKU 项目中单独设置 `VITE_CAMPUS=pku`（其余 Coze / 高德变量与北交大相同）。
+
+### PKU 部署脚本
+
+```bash
+cd projects/量子烟火
+./scripts/vercel-setup-pku.sh   # 首次：创建项目 + 同步 env + 部署
+./scripts/vercel-deploy-pku.sh  # 后续：同步 env + 重新部署
+```
+
+可选：在 PKU 项目 Domains 中绑定 `pku.app`。
 
 ### 启用真实 Coze API
 
@@ -68,6 +81,7 @@ vercel --prod
 | COZE_OUTER_TOKEN | ✅ | Outer Bot |
 | VITE_AMAP_KEY | ✅ | 高德地图 |
 | VITE_AMAP_SECURITY_CODE | ✅ | 高德安全密钥 |
+| VITE_CAMPUS | PKU 项目必填 | `pku` 启用北大燕园；北交大项目不设或 `bjtu` |
 
 Token 可从 `../量子烟火-server/.env` 复制。
 

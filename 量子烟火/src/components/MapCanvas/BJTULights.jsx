@@ -43,6 +43,24 @@ const DOT_PATTERNS = {
     [1,0,0,0,1],
     [0,1,1,1,0],
   ],
+  P: [
+    [1,1,1,1,0],
+    [1,0,0,0,1],
+    [1,0,0,0,1],
+    [1,1,1,1,0],
+    [1,0,0,0,0],
+    [1,0,0,0,0],
+    [1,0,0,0,0],
+  ],
+  K: [
+    [1,0,0,0,1],
+    [1,0,0,1,0],
+    [1,0,1,0,0],
+    [1,1,0,0,0],
+    [1,0,1,0,0],
+    [1,0,0,1,0],
+    [1,0,0,0,1],
+  ],
   Q: [
     [1,1,1,1,0],
     [1,0,0,0,1],
@@ -134,7 +152,7 @@ function drawCurve(ctx, points, dotSize, opacity, glowIntensity) {
   });
 }
 
-export default function BJTULights({ mapContainer }) {
+export default function BJTULights({ mapContainer, mapCanvasText = 'BJTU' }) {
   const canvasRef = useRef(null);
   const animationRef = useRef(null);
 
@@ -157,7 +175,7 @@ export default function BJTULights({ mapContainer }) {
     // 动画参数
     const dotSize = 3;
     const dotSpacing = 4;
-    const text = 'BJTU';
+    const text = mapCanvasText.toUpperCase();
     const textY = 22; // 顶部位置，避开标题栏
 
     // 计算文本宽度
@@ -236,7 +254,7 @@ export default function BJTULights({ mapContainer }) {
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [mapContainer]);
+  }, [mapContainer, mapCanvasText]);
 
   return (
     <canvas
