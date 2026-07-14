@@ -43,9 +43,26 @@ export function initAMap(containerId) {
     _buildingsCache['inner'] = createBuildings('inner')
     map.add(_buildingsCache['outer'])
 
+    applyCampusBounds(map)
+
     map.on('complete', () => resolve({ map, buildings: _buildingsCache['outer'] }))
     map.on('error', (e) => reject(e))
   })
+}
+
+/** 按 campus.map.radius 限制拖拽范围，避免视野滑到校外（如北大北侧肖家河/北五环） */
+function applyCampusBounds(map) {
+  const radius = CAMPUS_MAP.radius
+  if (!radius || !Array.isArray(CAMPUS_MAP.center)) return
+
+  const [lng, lat] = CAMPUS_MAP.center
+  const dLat = radius / 111320
+  const dLng = radius / (111320 * Math.cos((lat * Math.PI) / 180))
+  const bounds = new AMap.Bounds(
+    [lng - dLng, lat - dLat],
+    [lng + dLng, lat + dLat],
+  )
+  map.setLimitBounds(bounds)
 }
 
 /** 外/内世界对应的建筑色调与地图底图
@@ -75,6 +92,8 @@ export function createBuildings(world) {
     zIndex: 10,
     merge: false,
     sort: true,
+    // 略抬高白模，增强校园建筑辨识度（尤其燕园低矮片区）
+    heightFactor: 1.15,
     wallColor: style.wallColor,
     roofColor: style.roofColor,
   })
@@ -269,9 +288,10 @@ export function addHeatmapLayer(map, data) {
 }
 
 /** 平滑飞行到指定坐标 */
-export function flyTo(map, { lng, lat, zoom = 18, pitch = 62 }) {
+export function flyTo(map, { lng, lat, zoom = 18, pitch } = {}) {
+  const targetPitch = pitch ?? Math.min(62, (CAMPUS_MAP.pitch || 50) + 8)
   map.setZoomAndCenter(zoom, [lng, lat], false, 800)
-  map.setPitch(pitch, false, 600)
+  map.setPitch(targetPitch, false, 600)
 }
 
 /** 实况天气 → 地图视角微调（pitch，避免大改 mapStyle 与双世界冲突） */
@@ -287,7 +307,7 @@ export const WEATHER_MAP_TWEAK = {
 export function applyWeatherToMap(map, theme = 'clear', { isMobile = false } = {}) {
   if (!map) return
   const tweak = WEATHER_MAP_TWEAK[theme] ?? WEATHER_MAP_TWEAK.clear
-  const basePitch = isMobile ? 42 : 55
+  const basePitch = isMobile ? Math.min(42, CAMPUS_MAP.pitch) : CAMPUS_MAP.pitch
   const pitch = Math.max(28, Math.min(62, basePitch + tweak.pitchDelta))
   map.setPitch(pitch, false, 450)
 }

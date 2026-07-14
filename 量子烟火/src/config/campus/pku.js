@@ -1,4 +1,4 @@
-/** 北京大学 · 燕园配置（坐标需坐标拾取工具微调） */
+/** 北京大学 · 燕园配置（GCJ-02；启动后可用 window.__qf_enableCoordPicker() 微调） */
 
 const COUNSELING = {
   id: 'psych_center',
@@ -9,8 +9,9 @@ const COUNSELING = {
     '北京大学心理中心',
     '新太阳学生中心',
   ],
-  lng: 116.30682,
-  lat: 39.99418,
+  // 新太阳学生中心（三角地南侧），避免偏到肖家河北缘
+  lng: 116.31035,
+  lat: 39.99055,
   accentColor: '#6ee7b7',
   info: {
     org: '北京大学学生心理健康教育与咨询中心',
@@ -39,11 +40,12 @@ export default {
   weatherLabel: '燕园',
 
   map: {
-    center: [116.3103, 39.9928],
-    zoom: 17.0,
-    pitch: 55,
-    rotation: -8,
-    radius: 1200,
+    // 「一塔湖图」核心：未名湖 / 博雅塔一带；面向东南学术楼群白模，避开肖家河北侧高层
+    center: [116.3088, 39.9919],
+    zoom: 17.85,
+    pitch: 50,
+    rotation: 28,
+    radius: 900,
   },
 
   assets: {
@@ -93,57 +95,57 @@ export default {
     {
       id: 'canteen_nongyuan', name: '农园食堂', type: 'canteen',
       poiKeywords: ['北京大学农园食堂', '农园食堂'],
-      lng: 116.31203, lat: 39.99411,
+      lng: 116.31485, lat: 39.99335,
     },
     {
       id: 'canteen_yannan', name: '燕南食堂', type: 'canteen',
       poiKeywords: ['北京大学燕南食堂', '燕南食堂'],
-      lng: 116.30786, lat: 39.98961,
+      lng: 116.30725, lat: 39.98875,
     },
     {
       id: 'canteen_xuewu', name: '学五食堂', type: 'canteen',
       poiKeywords: ['北京大学学五食堂', '学五食堂'],
-      lng: 116.30542, lat: 39.99428,
+      lng: 116.30495, lat: 39.99385,
     },
     {
       id: 'boya', name: '博雅塔', type: 'academic',
       poiKeywords: ['北京大学博雅塔', '博雅塔'],
-      lng: 116.30877, lat: 39.99243,
+      lng: 116.30890, lat: 39.99195,
     },
     {
       id: 'library', name: '图书馆', type: 'academic',
       poiKeywords: ['北京大学图书馆', '北大图书馆'],
-      lng: 116.30972, lat: 39.99111,
+      lng: 116.31125, lat: 39.98985,
     },
     {
       id: 'lab', name: '王克桢楼', type: 'academic',
       poiKeywords: ['北京大学王克桢楼', '王克桢楼'],
-      lng: 116.30820, lat: 39.99085,
+      lng: 116.30955, lat: 39.99015,
     },
     {
       id: 'field', name: '五四体育场', type: 'outdoor',
       poiKeywords: ['北京大学五四体育场', '五四体育场'],
-      lng: 116.30620, lat: 39.99095,
+      lng: 116.30515, lat: 39.99055,
     },
     {
       id: 'dorm', name: '33楼宿舍区', type: 'dorm',
       poiKeywords: ['北京大学33楼', '33楼宿舍'],
-      lng: 116.31150, lat: 39.98980,
+      lng: 116.31235, lat: 39.98945,
     },
     {
       id: 'weiming_lake', name: '未名湖', type: 'outdoor',
       poiKeywords: ['北京大学未名湖', '未名湖'],
-      lng: 116.30740, lat: 39.99270,
+      lng: 116.30735, lat: 39.99255,
     },
     {
       id: 'lecture_hall', name: '百周年纪念讲堂', type: 'academic',
       poiKeywords: ['北京大学百周年纪念讲堂', '百讲'],
-      lng: 116.31056, lat: 39.99269,
+      lng: 116.31055, lat: 39.99115,
     },
     {
       id: 'statue_cai', name: '蔡元培像', type: 'heritage',
       poiKeywords: ['北京大学蔡元培像', '蔡元培像'],
-      lng: 116.30895, lat: 39.99305,
+      lng: 116.30835, lat: 39.99285,
       story: {
         title: '“思想自由，兼容并包”',
         summary: '蔡元培先生任北大校长期间，倡导思想自由与兼容并包，奠定了现代北大精神底色。',
@@ -155,7 +157,7 @@ export default {
     {
       id: 'heritage_boya', name: '博雅塔', type: 'heritage',
       poiKeywords: ['博雅塔 燕园', '北京大学博雅塔'],
-      lng: 116.30877, lat: 39.99243,
+      lng: 116.30890, lat: 39.99195,
       story: {
         title: '燕园地标',
         summary: '博雅塔矗立于未名湖畔，是燕园最具辨识度的建筑之一，也是北大人心中的精神坐标。',
@@ -167,7 +169,7 @@ export default {
     {
       id: 'heritage_weiming', name: '未名湖', type: 'heritage',
       poiKeywords: ['未名湖', '北京大学未名湖'],
-      lng: 116.30740, lat: 39.99270,
+      lng: 116.30735, lat: 39.99255,
       story: {
         title: '一湖燕园梦',
         summary: '未名湖与博雅塔相映成趣，是燕园最具诗性的空间，承载无数青春与思考。',
