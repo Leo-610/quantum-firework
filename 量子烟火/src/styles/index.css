@@ -3509,3 +3509,201 @@ html, body {
   }
 }
 
+/* ═══════════════════════════════════
+   Auth 登录 / 注册
+   ═══════════════════════════════════ */
+.auth-entry {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  padding: 2px 4px;
+}
+
+.auth-entry--compact {
+  font-size: 10px;
+  padding: 6px 8px;
+  border-radius: 10px;
+  background: var(--theme-surface);
+  border: 1px solid var(--theme-edge);
+}
+
+.auth-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 12000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(2, 6, 16, 0.72);
+  backdrop-filter: blur(8px);
+}
+
+.auth-modal {
+  width: min(100%, 360px);
+  border-radius: 16px;
+  padding: 16px;
+  background: var(--theme-surface-strong);
+  border: 1px solid var(--theme-edge);
+  box-shadow: 0 0 28px var(--theme-glow);
+  color: var(--theme-text);
+}
+
+.auth-modal--cyan {
+  --theme-primary: var(--inner-primary);
+  --theme-edge: var(--inner-edge);
+  --theme-glow: var(--inner-glow);
+  --theme-surface-strong: var(--inner-surface-strong);
+  --theme-text: var(--inner-text);
+}
+
+.auth-modal--orange {
+  --theme-primary: var(--outer-primary);
+  --theme-edge: var(--outer-edge);
+  --theme-glow: var(--outer-glow);
+  --theme-surface-strong: var(--outer-surface-strong);
+  --theme-text: var(--outer-text);
+}
+
+.auth-modal__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.auth-modal__title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--theme-primary);
+}
+
+.auth-modal__close {
+  border: none;
+  background: transparent;
+  color: var(--theme-text);
+  opacity: 0.55;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.auth-modal__form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.auth-modal__field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 11px;
+  font-family: 'JetBrains Mono', monospace;
+  opacity: 0.9;
+}
+
+.auth-modal__field input {
+  border-radius: 10px;
+  border: 1px solid var(--theme-edge);
+  background: rgba(0, 0, 0, 0.35);
+  color: var(--theme-text);
+  padding: 10px 12px;
+  font-size: 13px;
+  outline: none;
+}
+
+.auth-modal__field input:focus {
+  border-color: var(--theme-primary);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--theme-primary) 35%, transparent);
+}
+
+.auth-modal__submit {
+  margin-top: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid var(--theme-primary);
+  background: color-mix(in srgb, var(--theme-primary) 16%, transparent);
+  color: var(--theme-primary);
+  border-radius: 999px;
+  padding: 10px 14px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+}
+
+.auth-modal__submit:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.auth-modal__spin {
+  animation: auth-spin 0.9s linear infinite;
+}
+
+@keyframes auth-spin {
+  to { transform: rotate(360deg); }
+}
+
+.auth-modal__error {
+  margin: 0;
+  color: #ff6b8a;
+  font-size: 11px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.auth-modal__hint {
+  margin: 0;
+  color: color-mix(in srgb, var(--theme-primary) 80%, white);
+  font-size: 11px;
+  line-height: 1.5;
+  opacity: 0.85;
+}
+
+.auth-modal__meta {
+  margin: 0;
+  font-size: 11px;
+  opacity: 0.55;
+  font-family: 'JetBrains Mono', monospace;
+  line-height: 1.6;
+}
+
+.auth-modal__switch {
+  margin-top: 12px;
+  text-align: center;
+}
+
+.auth-modal__switch button,
+.auth-modal__logout {
+  border: none;
+  background: transparent;
+  color: var(--theme-primary);
+  opacity: 0.75;
+  font-size: 11px;
+  font-family: 'JetBrains Mono', monospace;
+  cursor: pointer;
+}
+
+.auth-modal__logout {
+  margin-top: 12px;
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  opacity: 0.65;
+}
+

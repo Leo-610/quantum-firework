@@ -9,6 +9,8 @@ import RadarChart from './RadarChart'
 import StyleRewriter from './StyleRewriter'
 import OuterFoodDisclaimer, { FoodResultNotice } from './OuterFoodDisclaimer'
 import Sigil from '../Sigil'
+import { insertFoodLog } from '../../api/userData'
+import { useAuthStore } from '../../store/authStore'
 
 const CANTEENS = CAMPUS_CANTEENS.map(c => ({ ...c, Icon: Building2 }))
 
@@ -22,6 +24,7 @@ export default function OuterWorldPanel({ isMobile = false }) {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
   const [copied, setCopied] = useState(false)
+  const authUser = useAuthStore(s => s.user)
 
   const handleCopy = useCallback((text) => {
     navigator.clipboard.writeText(text).then(() => {
@@ -69,6 +72,16 @@ export default function OuterWorldPanel({ isMobile = false }) {
         targetStyle: style,
       })
       setResult(data)
+      if (authUser) {
+        insertFoodLog(authUser.id, {
+          dishName: dishName || '今日特供',
+          reviewText: review,
+          styleId: data.style_id || style,
+          rewrittenText: data.rewritten_text || null,
+          radarData: data.radar_data || null,
+          canteenId: selectedCanteen,
+        }).catch(err => console.warn('[food_logs] sync failed', err.message))
+      }
     } catch (e) {
       console.error('美食工作流错误:', e)
       setError('文豪出走神了，稍候再试试？')

@@ -10,6 +10,7 @@
     "generate:og": "python3 scripts/generate-og-image.py"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.115.0",
     "@vercel/speed-insights": "^2.0.0",
     "echarts": "^5.5.1",
     "framer-motion": "^11.3.0",

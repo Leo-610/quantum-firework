@@ -82,6 +82,8 @@ vercel --prod
 | VITE_AMAP_KEY | ✅ | 高德地图 |
 | VITE_AMAP_SECURITY_CODE | ✅ | 高德安全密钥 |
 | VITE_CAMPUS | PKU 项目必填 | `pku` 启用北大燕园；北交大项目不设或 `bjtu` |
+| VITE_SUPABASE_URL | Auth 必填 | Supabase 项目 URL |
+| VITE_SUPABASE_ANON_KEY | Auth 必填 | anon / publishable key（勿用 service_role） |
 
 Token 可从 `../量子烟火-server/.env` 复制。
 
