@@ -16,17 +16,13 @@ import { useIsMobile } from './hooks/useMediaQuery'
 import { useAppBoot } from './hooks/useAppBoot'
 import SplashScreen from './components/SplashScreen'
 import SiteMusicPlayer from './components/Music/SiteMusicPlayer'
-import AuthModal, { AuthButton } from './components/Auth/AuthModal'
 import { campus } from './config/campus'
 import WeatherHud, { WeatherAtmosphere } from './components/Weather/WeatherHud'
 import { useWeatherStore } from './store/weatherStore'
-import { useAuthStore } from './store/authStore'
 
 export default function App() {
   const { world, isPanelOpen, setPanelOpen, userId, setUserId, mapInstance, selectedLandmark } = useWorldStore()
   const loadPlantsToHeatmap = useEmotionStore(s => s.loadPlantsToHeatmap)
-  const authInit = useAuthStore(s => s.init)
-  const authUser = useAuthStore(s => s.user)
   const isMobile = useIsMobile()
   const { complete: bootComplete, progress, phase } = useAppBoot()
   const isInner = world === 'inner'
@@ -38,20 +34,11 @@ export default function App() {
   const weatherBoost = weatherSource === 'manual' || weatherSource === 'url'
 
   useEffect(() => {
-    let unsubscribe = () => {}
-    authInit().then(off => {
-      if (typeof off === 'function') unsubscribe = off
-    })
-    return () => unsubscribe()
-  }, [authInit])
-
-  useEffect(() => {
-    // 未登录时保留本地匿名 ID；登录后由 authStore 覆盖为 auth.users.id
-    if (!authUser && !userId) {
+    if (!userId) {
       setUserId(uuidv4())
     }
     loadPlantsToHeatmap()
-  }, [authUser])
+  }, [])
 
   useEffect(() => {
     if (!bootComplete || isMobile) return
@@ -131,13 +118,11 @@ export default function App() {
               量子烟火
             </span>
           </div>
-          <div className="mobile-top-bar__actions pointer-events-auto flex items-center gap-2">
-            <AuthButton isInner={isInner} compact />
-            <button
+          <button
             onClick={() => setPanelOpen(!isPanelOpen)}
             aria-label={isPanelOpen ? '收起面板' : '展开面板'}
             className={`
-              mobile-top-bar__menu hud-glass touch-target
+              mobile-top-bar__menu hud-glass touch-target pointer-events-auto
               ${isInner
                 ? 'text-cyan-400/80 border border-cyan-400/20'
                 : 'text-orange-400/80 border border-orange-400/20'
@@ -146,7 +131,6 @@ export default function App() {
           >
             {isPanelOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
-          </div>
         </div>
       ) : (
         <>
@@ -167,9 +151,6 @@ export default function App() {
           </div>
           <div className="absolute top-4 right-4 z-50 desktop-only">
             <div className="flex flex-col items-end gap-2">
-              <div className="hud-glass px-2 py-1.5 rounded-lg">
-                <AuthButton isInner={isInner} />
-              </div>
               <button
                 onClick={() => setPanelOpen(!isPanelOpen)}
                 className={`
@@ -350,7 +331,6 @@ export default function App() {
 
       <ParticleLayer world={world} isMobile={isMobile} />
       {bootComplete && <SiteMusicPlayer isMobile={isMobile} />}
-      <AuthModal isInner={isInner} />
     </div>
 
     <AnimatePresence>

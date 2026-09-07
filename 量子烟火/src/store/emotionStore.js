@@ -1,5 +1,4 @@
 import { create } from 'zustand'
-import { insertEmotionPlant } from '../api/userData'
 
 function safeLoadPlants() {
   try {
@@ -8,10 +7,6 @@ function safeLoadPlants() {
     localStorage.removeItem('qf_plants')
     return []
   }
-}
-
-function persistPlants(plants) {
-  localStorage.setItem('qf_plants', JSON.stringify(plants))
 }
 
 /** 情绪状态：植物、打卡记录、热力图数据 */
@@ -42,46 +37,12 @@ export const useEmotionStore = create((set, get) => ({
 
   setLatestEcho: (echo) => set({ latestEcho: echo }),
 
-  replacePlants: (plants) => {
-    persistPlants(plants)
-    set({
-      plants,
-      heatmapData: plants.map(p => ({ lng: p.lng, lat: p.lat, count: 1 })),
-    })
-  },
-
   addPlant: (plant) => {
-    const localId = String(Date.now())
-    const next = {
-      ...plant,
-      id: localId,
-      localId,
-      timestamp: new Date().toISOString(),
-    }
-    const plants = [...get().plants, next]
-    persistPlants(plants)
-    set({
-      plants,
-      heatmapData: plants.map(p => ({ lng: p.lng, lat: p.lat, count: 1 })),
-    })
-
-    // 已登录则异步写入云端（避免与 authStore 循环依赖）
-    import('../store/authStore').then(({ useAuthStore }) => {
-      const user = useAuthStore.getState().user
-      if (!user) return
-      insertEmotionPlant(user.id, next)
-        .then((remote) => {
-          const merged = get().plants.map(p => (
-            p.localId === localId || p.id === localId ? { ...remote, localId } : p
-          ))
-          persistPlants(merged)
-          set({
-            plants: merged,
-            heatmapData: merged.map(p => ({ lng: p.lng, lat: p.lat, count: 1 })),
-          })
-        })
-        .catch(err => console.warn('[plants] cloud sync failed', err.message))
-    })
+    const plants = [...get().plants, { ...plant, id: Date.now(), timestamp: new Date().toISOString() }]
+    localStorage.setItem('qf_plants', JSON.stringify(plants))
+    set({ plants })
+    // 同步更新热力图
+    set({ heatmapData: plants.map(p => ({ lng: p.lng, lat: p.lat, count: 1 })) })
   },
 
   loadPlantsToHeatmap: () => {
